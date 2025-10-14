@@ -1,0 +1,90 @@
+/* Variables globales */
+:root {
+  --font-size-base: 16px; /* tamaño inicial */
+}
+
+/* Tipografía escalable global*/
+body, input, button, a, p, span, div, label {
+  font-size: var(--font-size-base) !important;
+  line-height: 1.4;
+}
+
+/* Títulos proporcionales (relativos a font-size-base) */
+h1 { font-size: 2em !important; }
+h2 { font-size: 1.75em !important; }
+h3 { font-size: 1.5em !important; }
+h4 { font-size: 1.25em !important; }
+h5 { font-size: 1.1em !important; }
+h6 { font-size: 1em !important; }
+
+/* Validación de formularios */
+input.ng-valid:not(form).ng-touched {
+  border-left: 5px solid #42A948; /* Verde para válido */
+}
+
+input.ng-invalid:not(form).ng-touched {
+  border-left: 5px solid #d9534f; /* Rojo para inválido */
+}
+
+/* Suaviza el cambio de color */
+input {
+  transition: border-left 0.3s ease;
+}
+
+/* Barra de accesibilidad vertical */
+.accessibility-bar {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  background-color: #004080; /* azul oscuro */
+  padding: 0.7rem 0.5rem;
+  border-radius: 12px 0 0 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  z-index: 2000;
+}
+
+.accessibility-bar button {
+  width: 45px;
+  height: 45px;
+  border: none;
+  border-radius: 8px;
+  background-color: #fff;
+  color: #004080;
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.accessibility-bar button:hover {
+  background-color: #e9ecef;
+  transform: scale(1.1);
+}
+
+.accessibility-bar button:focus {
+  outline: 2px solid #0d6efd; /* borde azul accesible */
+  outline-offset: 2px;
+}
+
+/* Modo alto contraste*/
+.high-contrast {
+  background-color: #000 !important;
+  color: rgb(239, 239, 232) !important;
+}
+
+.high-contrast a {
+  color: #0ff !important;
+}
+
+.high-contrast input,
+.high-contrast button {
+  background-color: #000 !important;
+  color: #fff !important;
+  border: 1px solid #fff !important;
+}

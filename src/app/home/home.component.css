@@ -1,0 +1,326 @@
+/* Contenedor principal MEJORADO */
+.home-container {
+  min-height: calc(100vh - 160px);
+  background: linear-gradient(135deg, #1a2a3a 0%, #2d4a5c 50%, #3a6b7a 100%);
+  padding: 40px 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container {
+  max-width: 1200px;
+}
+
+/* Títulos de bienvenida - MEJOR LEGIBILIDAD */
+.welcome-title {
+  font-size: 2.5rem;
+  color: #ffffff;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  text-align: center;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  letter-spacing: -0.5px;
+}
+
+.welcome-subtitle {
+  font-size: 1.2rem;
+  color: #e2e8f0;
+  font-weight: 400;
+  margin-bottom: 0;
+  text-align: center;
+  opacity: 0.9;
+}
+
+/* Carrusel MEJORADO */
+.custom-carousel {
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  margin-bottom: 3rem;
+}
+
+.carousel-content {
+  position: relative;
+  height: 500px;
+  overflow: hidden;
+}
+
+.carousel-content img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.carousel-item:hover .carousel-content img {
+  transform: scale(1.05);
+}
+
+.carousel-caption-custom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+  padding: 2rem;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.carousel-caption-custom h5 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.carousel-caption-custom p {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  opacity: 0.9;
+}
+
+.carousel-caption-custom .price {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 1.5rem;
+}
+
+.carousel-caption-custom .btn-primary {
+  background: linear-gradient(135deg, #2d4a5c 0%, #3a6b7a 100%);
+  border: none;
+  padding: 12px 30px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+}
+
+.carousel-caption-custom .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(58, 107, 122, 0.4);
+}
+
+/* Sección de ofertas especiales CON IMÁGENES */
+.special-offers {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 3rem 2rem;
+  margin-top: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+  font-size: 2rem;
+  color: #1a2a3a;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-weight: 700;
+}
+
+/* Grid de ofertas */
+.offers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+}
+
+.offer-card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: 1px solid #e2e8f0;
+}
+
+.offer-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+/* Imagen de la oferta */
+.offer-image {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
+.offer-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.offer-badge {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: linear-gradient(135deg, #2d4a5c, #3a6b7a);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Contenido de la oferta */
+.offer-content {
+  padding: 1.5rem;
+}
+
+.offer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.score {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a2a3a;
+}
+
+.reviews {
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.offer-status {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 15px;
+}
+
+.offer-status.active {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.offer-status.limited {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.offer-status.last {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* Detalles de la oferta */
+.offer-details {
+  margin-bottom: 1.5rem;
+}
+
+.offer-name {
+  font-size: 1.3rem;
+  color: #1a2a3a;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.offer-description {
+  color: #64748b;
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+.price-info {
+  margin-bottom: 1rem;
+}
+
+.price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a2a3a;
+  display: block;
+}
+
+.period {
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.feature {
+  font-size: 0.9rem;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.feature:before {
+  content: "✓";
+  color: #10b981;
+  font-weight: bold;
+}
+
+/* Botón de oferta */
+.offer-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #2d4a5c 0%, #3a6b7a 100%);
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.offer-btn:hover {
+  background: linear-gradient(135deg, #3a6b7a 0%, #4a7c8a 100%);
+  transform: translateY(-2px);
+}
+
+/* Footer del hotel */
+.hotel-footer {
+  margin-top: 3rem;
+  padding: 2rem 0;
+}
+
+.footer-text {
+  color: #e2e8f0;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.footer-text strong {
+  color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .welcome-title {
+    font-size: 2rem;
+  }
+  
+  .carousel-content {
+    height: 300px;
+  }
+  
+  .offers-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .special-offers {
+    padding: 2rem 1rem;
+    margin: 1rem;
+  }
+}

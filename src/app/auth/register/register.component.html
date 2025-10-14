@@ -1,0 +1,133 @@
+<form [formGroup]="registerForm" (ngSubmit)="register()" autocomplete="off">
+  <div class="auth-card">
+    <!-- Columna izquierda: formulario -->
+    <div class="auth-form-container">
+      <div class="auth-form">
+        <h2 class="text-center mb-4">Registro de Usuario</h2>
+
+        <!-- Cédula -->
+        <div class="mb-3">
+          <label for="cedula" class="form-label">Cédula</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-card-text"></i></span>
+            <input id="cedula" type="text" class="form-control"
+                   formControlName="cedula" placeholder="Ej: 12345678">
+          </div>
+          @if (cedula.touched && cedula.invalid) {
+            <div class="text-danger">
+              @if (cedula.hasError('required')) {<small>La cédula es requerida</small>}
+              @if (cedula.hasError('minlength')) {<small>Mínimo 6 dígitos</small>}
+              @if (cedula.hasError('pattern')) {<small>Solo números</small>}
+            </div>
+          }
+        </div>
+
+        <!-- Nombres -->
+        <div class="mb-3">
+          <label for="nombres" class="form-label">Nombres</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+            <input id="nombres" type="text" class="form-control"
+                   formControlName="nombres" placeholder="Ej: Daniela Pérez">
+          </div>
+          @if (nombres.touched && nombres.invalid) {
+            <div class="text-danger">
+              @if (nombres.hasError('required')) {<small>Los nombres son requeridos</small>}
+              @if (nombres.hasError('pattern')) {<small>Solo letras y espacios</small>}
+            </div>
+          }
+        </div>
+
+        <!-- Email -->
+        <div class="mb-3">
+          <label for="email" class="form-label">Correo electrónico</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-envelope-fill"></i></span>
+            <input id="email" type="email" class="form-control"
+                   formControlName="email" placeholder="ejemplo@email.com">
+          </div>
+          @if (email.touched && email.invalid) {
+            <div class="text-danger">
+              @if (email.hasError('required')) {<small>El correo es obligatorio</small>}
+              @if (email.hasError('email')) {<small>Debe ser válido</small>}
+            </div>
+          }
+        </div>
+
+        <!-- Teléfono -->
+        <div class="mb-3">
+          <label for="telefono" class="form-label">Teléfono</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-telephone-fill"></i></span>
+            <input id="telefono" type="text" class="form-control"
+                   formControlName="telefono" placeholder="Ej: 3001234567">
+          </div>
+          @if (telefono.touched && telefono.invalid) {
+            <div class="text-danger">
+              @if (telefono.hasError('required')) {<small>El teléfono es requerido</small>}
+              @if (telefono.hasError('pattern')) {<small>Solo números</small>}
+            </div>
+          }
+        </div>
+
+        <!-- Contraseña -->
+        <div class="mb-3">
+          <label for="password" class="form-label">Contraseña</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+            <input id="password" type="password" class="form-control"
+                   formControlName="password" placeholder="********">
+          </div>
+          @if (password.touched && password.invalid) {
+            <div class="text-danger">
+              @if (password.hasError('required')) {<small>La contraseña es requerida</small>}
+              @if (password.hasError('minlength')) {<small>Mínimo 6 caracteres</small>}
+            </div>
+          }
+        </div>
+
+        <!-- Confirmar contraseña -->
+        <div class="mb-3">
+          <label for="confirmPassword" class="form-label">Confirmar contraseña</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-shield-lock-fill"></i></span>
+            <input id="confirmPassword" type="password" class="form-control"
+                   formControlName="confirmPassword" placeholder="********">
+          </div>
+          @if (confirmPassword.touched && confirmPassword.invalid) {
+            <div class="text-danger"><small>Debes confirmar tu contraseña</small></div>
+          }
+          @if (registerForm.touched && registerForm.hasError('passwordsMismatch')) {
+            <div class="text-danger"><small>Las contraseñas no coinciden</small></div>
+          }
+        </div>
+
+        <!-- Términos -->
+        <div class="form-check mb-3">
+          <input id="terminos" class="form-check-input" type="checkbox" formControlName="terminos">
+          <label class="form-check-label" for="terminos">
+            Acepto los términos y condiciones
+          </label>
+          @if (terminos.touched && terminos.invalid) {
+            <div class="text-danger"><small>Debes aceptar los términos</small></div>
+          }
+        </div>
+
+        <!-- Botón -->
+        <div class="d-grid mb-3">
+          <button type="submit" class="btn btn-primary" [disabled]="registerForm.invalid">
+            Registrarse
+          </button>
+        </div>
+
+        <!-- Link a Login -->
+        <div class="text-center">
+          <a class="nav-link" routerLink="/login">¿Ya tienes cuenta? Inicia Sesión</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Columna derecha: imagen (como en los mockups) -->
+    <div class="auth-image"></div>
+  </div>
+</form>

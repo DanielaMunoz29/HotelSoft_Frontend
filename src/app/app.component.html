@@ -1,0 +1,32 @@
+<app-header></app-header>
+
+<!-- Barra vertical flotante accesibilidad -->
+<div class="accessibility-bar">
+  <!-- Contraste -->
+  <button (click)="toggleContrast()" aria-label="Cambiar contraste">
+    <i class="bi bi-circle-half"></i>
+  </button>
+
+  <!-- Reducir texto -->
+  <button (click)="decreaseFont()" aria-label="Reducir tamaño texto">
+    <i class="bi bi-dash-lg"></i>
+  </button>
+
+  <!-- Aumentar texto -->
+  <button (click)="increaseFont()" aria-label="Aumentar tamaño texto">
+    <i class="bi bi-plus-lg"></i>
+  </button>
+
+  <!-- Icono general de accesibilidad -->
+  <button aria-label="Opciones de accesibilidad">
+    <i class="bi bi-universal-access"></i>
+  </button>
+</div>
+
+<!-- Contenido dinámico -->
+<router-outlet></router-outlet>
+
+<!-- Footer -->
+<div class="fixed-bottom">
+  <app-footer></app-footer>
+</div>

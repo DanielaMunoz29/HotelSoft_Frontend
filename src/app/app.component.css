@@ -1,0 +1,34 @@
+/* Menú de accesibilidad fijo arriba a la derecha */
+.accessibility-menu {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  z-index: 2000;
+}
+
+/* Estilos para los botones del menú */
+.accessibility-menu button {
+  padding: 0.4rem 0.6rem;
+  font-size: 0.9rem;
+  border: 1px solid #444;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #fff;
+  transition: background-color 0.3s ease;
+}
+
+.accessibility-menu button:hover {
+  background-color: #e9ecef;
+}
+
+/* Modo alto contraste */
+.high-contrast {
+  background-color: black !important;
+  color: yellow !important;
+}
+
+.high-contrast a {
+  color: cyan !important;
+}
