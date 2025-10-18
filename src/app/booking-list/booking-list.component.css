@@ -1,0 +1,36 @@
+.booking-list-container {
+  min-height: calc(100vh - 160px);
+  padding: 50px 20px 80px 20px;
+  background: linear-gradient(135deg, #1a2a3a 0%, #2d4a5c 50%, #3a6b7a 100%);
+}
+
+.booking-status {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 15px;
+}
+
+.booking-status.confirmed {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.booking-status.pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.booking-status.cancelled {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.booking-status.unknown {
+  background: #e2e8f0;
+  color: #4b5563;
+}
+
+.booking-container-img, .booking-container-info {
+    height: 230px;
+}

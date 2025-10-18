@@ -1,0 +1,6 @@
+.room-list-container {
+    min-height: calc(100vh - 160px);
+    background: linear-gradient(135deg, #1a2a3a 0%, #2d4a5c 50%, #3a6b7a 100%);
+    padding: 40px 100px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}

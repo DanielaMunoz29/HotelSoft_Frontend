@@ -1,0 +1,134 @@
+<div class="room-form-background">
+    <h2 class="text-center text-white mb-5">Habitación</h2>
+    <div class="room-form-container">
+        <form #roomForm="ngForm" (ngSubmit)="onSubmit(roomForm)" novalidate>
+            @if (isEditMode) {
+            <div class="mb-2">
+                <span class="fst-italic">#{{room.id}}</span>
+            </div>
+            }
+            <!-- Nombre habitacion -->
+            <div class="form-floating mb-3">
+                <input id="roomName" name="roomName" type="text" class="form-control" placeholder="Nombre" required
+                    minlength="1" maxlength="50" [(ngModel)]="room.name" #roomName="ngModel" [ngClass]="submitted && roomName.invalid
+                  ? 'is-invalid' : '' " />
+                <label for="roomName" class="form-label">Nombre</label>
+
+                @if (submitted && roomName.invalid) {
+                <div class="invalid-feedback">
+                    El nombre es obligatorio.
+                </div>
+                }
+            </div>
+
+            <!-- Numero habitacion -->
+            <div class="form-floating mb-3">
+                <input id="roomNumber" name="roomNumber" type="text" class="form-control" placeholder="Número" required
+                    (input)="filterNumbers($event)" maxlength="4" [(ngModel)]="room.number" #roomNumber="ngModel"
+                    [ngClass]="submitted && roomNumber.invalid
+                  ? 'is-invalid' : '' " />
+                <label for="roomNumber" class="form-label">Número</label>
+
+                @if (submitted && roomNumber.invalid) {
+                    @if (roomNumber.errors?.['required']) {
+                    <div class="invalid-feedback">
+                        El número de habitación es obligatorio.
+                    </div>
+                    }
+                    @if (roomNumber.errors?.['maxlength']) {
+                    <div class="invalid-feedback">
+                        El número de habitación no puede exceder los 4 dígitos.
+                    </div>
+                    }
+                }
+            </div>
+
+            <!-- Tipo habitacion -->
+            <div class="form-floating mb-3">
+                <select class="form-select" name="roomType" id="roomType" placeholder="Tipo" required
+                    [(ngModel)]="room.type" #roomType="ngModel">
+                    <option value="" selected>Seleccione una opción</option>
+                    <option value="SENCILLA">Sencilla</option>
+                    <option value="DOBLE">Doble</option>
+                    <option value="SUITE">Suite</option>
+                    <option value="FAMILIAR">Familiar</option>
+                </select>
+                <label for="roomType">Tipo</label>
+                <div class="invalid-feedback">El tipo de habitación es obligatorio.</div>
+            </div>
+
+            <!-- Precio habitacion -->
+            <div class="form-floating mb-3">
+                <input id="roomPrice" name="roomPrice" type="number" class="form-control" min="0" placeholder="Precio"
+                    [(ngModel)]="room.price" #roomPrice="ngModel" required />
+                <label for="roomPrice" class="form-label">Precio</label>
+                <div class="invalid-feedback">El precio es obligatorio.</div>
+            </div>
+
+            <!-- Descripcion habitacion -->
+            <div class="form-floating mb-4">
+                <textarea class="form-control" placeholder="Descripcion" id="roomDescription" name="roomDescription"
+                    style="height: 100px" maxlength="200"></textarea>
+                <label for="roomDescription">Descripcion</label>
+            </div>
+
+            <!-- Comodidades -->
+            <div class="mb-4">
+                <label class="form-label fw-bold">Comodidades</label>
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    @for (amenity of amenitiesList; track $index) {
+                    <button type="button" class="btn"
+                        [ngClass]=" isAmenitySelected(amenity.value) ? 'btn-secondary' : 'btn-outline-secondary' "
+                        (click)="toggleAmenity(amenity.value)">
+                        @if (amenity.icon) {
+                        <i [class]="amenity.icon"></i>
+                        }
+                        {{ amenity.label }}
+                    </button>
+                    }
+                </div>
+            </div>
+
+            <!-- Imagenes -->
+            <div class="mb-4">
+                <label class="form-label fw-bold">Imágenes</label>
+
+                <div class="border-dashed rounded-3 p-4 text-center" [class.bg-light]="!isDragging"
+                    [class.bg-secondary-subtle]="isDragging" (dragover)="onDragOver($event)"
+                    (dragleave)="onDragLeave($event)" (drop)="onDrop($event)" (click)="fileInput.click()"
+                    style="cursor: pointer; transition: background-color 0.2s;">
+
+                    <input #fileInput type="file" multiple accept="image/*" (change)="onFileSelect($event)" hidden>
+
+                    @if (selectedImages.length === 0) {
+                    <div class="text-muted">
+                        <i class="bi bi-cloud-arrow-up fs-1 d-block mb-2"></i>
+                        <span>Haz clic o arrastra tus imágenes aquí</span>
+                    </div>
+                    } @else {
+                    <div class="d-flex flex-wrap justify-content-center gap-2">
+                        @for (img of selectedImages; track $index) {
+                        <div class="position-relative rounded overflow-hidden draggable-image room-image-container"
+                            draggable="true" (dragstart)="onDragStart($event, $index)"
+                            (dragover)="onDragOverImage($event, $index)"
+                            (drop)="onDropImage($event, $index); $event.stopPropagation()" (dragend)="onDragEnd()">
+
+                            <img [src]="img.url" alt="imagen" class="rounded room-image" />
+
+                            <button type="button" class="btn-remove-image" (click)="removeImage($index, $event)">
+                                ×
+                            </button>
+                            @if ($index === 0) {
+                            <span class="badge-portada">Portada</span>
+                            }
+                        </div>
+                        }
+                    </div>
+                    }
+                </div>
+            </div>
+            <button class="btn" [ngClass]=" isEditMode ? 'btn-secondary' : 'btn-primary' " type="submit">{{isEditMode ?
+                'Guardar cambios' : 'Guardar' }}</button>
+        </form>
+    </div>
+</div>

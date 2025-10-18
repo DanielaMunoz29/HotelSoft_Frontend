@@ -106,9 +106,9 @@ export class AuthService {
    */
   private startInactivityMonitoring(): void {
     if (this.isMonitoringActive) return;
-    
+
     this.isMonitoringActive = true;
-    
+
     // Escuchar eventos de actividad
     const events = ['click', 'mousemove', 'keypress', 'scroll', 'touchstart'];
     events.forEach(event => {
@@ -119,7 +119,7 @@ export class AuthService {
     this.inactivityTimer = setInterval(() => {
       this.checkInactivity();
     }, 30000);
-    
+
     this.resetInactivityTimer();
   }
 
@@ -167,9 +167,9 @@ export class AuthService {
     this.stopInactivityMonitoring();
     this.logout();
     this.router.navigate(['/login'], {
-      queryParams: { 
+      queryParams: {
         sessionExpired: 'true',
-        reason: 'inactividad' 
+        reason: 'inactividad'
       }
     });
   }
@@ -333,7 +333,9 @@ export class AuthService {
     if (!token) return false;
 
     try {
+      console.log('Token encontrado:', token);
       const payload = JSON.parse(atob(token.split('.')[1]));
+      console.log('Payload del token:', payload);
       const exp = payload.exp * 1000;
       return Date.now() < exp;
     } catch (error) {
@@ -399,11 +401,11 @@ export class AuthService {
    */
   logout(): void {
     this.stopInactivityMonitoring();
-    
+
     // Limpiar almacenamiento local
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.USER_KEY);
-    
+
     // Actualizar estados
     this.isAuthenticatedSubject.next(false);
     this.userDataSubject.next(null);

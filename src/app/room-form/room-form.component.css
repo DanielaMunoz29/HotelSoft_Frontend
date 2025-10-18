@@ -1,0 +1,62 @@
+.room-form-background {
+    min-height: 100vh;
+    padding: 50px 20px 100px 20px;
+    background: linear-gradient(135deg, #1a2a3a 0%, #2d4a5c 50%, #3a6b7a 100%);
+}
+
+.room-form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.room-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+}
+
+.room-image-container {
+    width: 150px;
+    height: 150px;
+    cursor: grab;
+}
+
+.btn-remove-image {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: rgba(255, 0, 0, 0.7);
+    border: none;
+    color: white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.btn-remove-image:hover {
+    background-color: rgba(255, 0, 0, 1);
+}
+
+.border-dashed {
+    border: 3px dashed #ccc;
+}
+
+/* Badge de portada */
+.badge-portada {
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
+  background-color: #468de9;
+  color: #000;
+  font-size: 0.8rem !important;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
