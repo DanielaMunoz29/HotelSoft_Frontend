@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Room } from '../core/models/room.model';
@@ -16,7 +16,7 @@ import { AMENITIES_LIST } from '../core/constants/amenities';
 })
 export class RoomFormComponent {
   room: Room = {
-    id: 0,
+    idHabitacion: 0,
     nombreHabitacion: '',
     numeroHabitacion: '',
     tipoHabitacion: '',
@@ -39,7 +39,8 @@ export class RoomFormComponent {
 
   constructor(
     private roomService: RoomService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
 
   }
@@ -54,7 +55,7 @@ export class RoomFormComponent {
       } else {
         this.isEditMode = false;
         this.room = {
-          id: 0,
+          idHabitacion: 0,
           nombreHabitacion: '',
           numeroHabitacion: '',
           tipoHabitacion: '',
@@ -207,6 +208,7 @@ export class RoomFormComponent {
           title: 'Habitación creada',
           text: `La habitación ${data.nombreHabitacion} ha sido creada exitosamente.`,
         });
+        this.router.navigate(['/room-list']);
       },
       error: (error) => {
         Swal.fire({

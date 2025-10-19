@@ -1,25 +1,27 @@
-<div class="booking-list-container">
+<!-- <div class="booking-list-container">
     <h2 class="text-center text-white mb-5">Mis Reservas</h2>
     <div class="container">
         @for (booking of bookings; track $index) {
         <div class="row align-items-center overflow-hidden border-0 rounded-4 shadow-sm p-0 mb-4 bg-white">
             <div class="col-6 col-lg-5 col-xxl-4 p-0 text-center booking-container-img">
-                <img style="width: 100%; height: 100%; object-fit: cover;" src="/habitacionescamadoble.jpg" />
+                <img style="width: 100%; height: 100%; object-fit: cover;" src="{{ booking.habitacion.imagenes[0] }}" />
             </div>
-            <div class="position-relative col-6 col-lg-7 col-xxl-8 p-3 h-100 rounded-end bg-white booking-container-info">
+            <div
+                class="position-relative col-6 col-lg-7 col-xxl-8 p-3 h-100 rounded-end bg-white booking-container-info">
                 <h3>Reserva #{{ booking.idReserva }}</h3>
                 <p><strong>Habitación:</strong> {{ booking.habitacion.nombreHabitacion }}</p>
                 <p><strong>Entrada:</strong> {{ booking.fechaEntrada | date:'medium' }}</p>
                 <p><strong>Salida:</strong> {{ booking.fechaSalida | date:'medium' }}</p>
+                <p><strong>TOTAL:</strong> {{ booking.precioTotal | currency:'COP':'symbol':'1.0' }}</p>
                 <div class="position-absolute top-0 end-0 m-3">
                     @switch (booking.estadoReserva) {
-                    @case ('confirmed') {
+                    @case ('CONFIRMADO') {
                     <span class="booking-status confirmed">Confirmado</span>
                     }
-                    @case ('pending') {
+                    @case ('PENDIENTE') {
                     <span class="booking-status pending">Pendiente</span>
                     }
-                    @case ('cancelled') {
+                    @case ('CANCELADO') {
                     <span class="booking-status cancelled">Cancelado</span>
                     }
                     @default {
@@ -27,10 +29,121 @@
                     }
                     }
                 </div>
-                <button type="button" class="btn btn-primary">Detalles habitación</button>
+                <button class="btn btn-primary" title="Ver detalles" data-bs-toggle="modal"
+                    data-bs-target="#roomDetailModal" (click)="openRoomDetail(booking.habitacion)">Detalles habitación</button>
                 <button type="button" class="btn btn-secondary ms-3">Cancelar</button>
             </div>
         </div>
         }
+    </div>
+</div> -->
+
+<div class="booking-list-container">
+    <h2 class="text-center text-white mb-5 fw-bold">Mis Reservas</h2>
+    <div class="container">
+        @for (booking of bookings; track $index) {
+        <div class="row booking-card align-items-stretch g-0 mb-4 bg-white rounded-4 overflow-hidden shadow-sm">
+            <div class="col-12 col-md-5 booking-container-img">
+                <img [src]="booking.habitacion.imagenes[0]" class="img-fluid h-100 w-100 object-fit-cover"
+                    alt="Imagen habitación" />
+            </div>
+
+            <div class="col-12 col-md-7 position-relative p-4 booking-container-info">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <h4 class="fw-semibold text-primary mb-0">Reserva #{{ booking.idReserva }}</h4>
+                    <span class="booking-status" [ngClass]="booking.estadoReserva | lowercase">
+                        {{ booking.estadoReserva }}
+                    </span>
+                </div>
+
+                <p class="mb-2"><strong>Habitación:</strong> {{ booking.habitacion.nombreHabitacion }}</p>
+                <p class="mb-2"><strong>Entrada:</strong> {{ booking.fechaEntrada | date:'medium' }}</p>
+                <p class="mb-2"><strong>Salida:</strong> {{ booking.fechaSalida | date:'medium' }}</p>
+                <p class="mb-3"><strong>Total:</strong>
+                    <span class="fw-semibold text-success">
+                        {{ booking.precioTotal | currency:'COP':'symbol':'1.0' }}
+                    </span>
+                </p>
+
+                <div class="mt-auto d-flex flex-wrap gap-2">
+                    <button class="btn btn-outline-primary" title="Ver detalles" data-bs-toggle="modal"
+                        data-bs-target="#roomDetailModal" (click)="openRoomDetail(booking.habitacion)">Ver
+                        detalles habitación</button>
+                    @if (booking.estadoReserva === 'CONFIRMADO' || booking.estadoReserva === 'PENDIENTE') {
+                    <button type="button" class="btn btn-outline-danger" (click)="cancelBooking(booking.idReserva)">Cancelar</button>
+                    }
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+</div>
+
+
+<div class="modal fade " id="roomDetailModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="roomDetailModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detalle habitación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="clearRoomDetail()"></button>
+            </div>
+            <div class="modal-body p-0">
+                <div id="roomDetailImg" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        @for (imagenURL of roomDetail?.imagenes; track $index) {
+                        <div [ngClass]="$index === 0 ? 'carousel-item active' : 'carousel-item'">
+                            <img src="{{ imagenURL }}" style="object-fit: cover; height: 400px;" class="d-block w-100">
+                        </div>
+                        }
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#roomDetailImg"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#roomDetailImg"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+
+                <div class="room-content">
+                    <div class="room-header">
+                        <h3 class="room-name">{{roomDetail?.nombreHabitacion}}</h3>
+                        @switch (roomDetail?.tipoHabitacion) {
+                        @case ('SENCILLA') {
+                        <span class="room-type-badge simple">{{ roomDetail?.tipoHabitacion | uppercase }}</span>
+                        }
+                        @case ('DOBLE') {
+                        <span class="room-type-badge double">{{ roomDetail?.tipoHabitacion | uppercase }}</span>
+                        }
+                        @case ('SUITE') {
+                        <span class="room-type-badge suite">{{ roomDetail?.tipoHabitacion | uppercase }}</span>
+                        }
+                        @case ('FAMILIAR') {
+                        <span class="room-type-badge familiar">{{ roomDetail?.tipoHabitacion | uppercase }}</span>
+                        }
+                        }
+                    </div>
+
+                    <div class="room-details">
+                        <p class="room-description">{{roomDetail?.descripcion}}</p>
+
+                        <div class="price-info">
+                            <span class="price">{{roomDetail?.precio | currency:'COP':'symbol':'1.0'}} / noche</span>
+                        </div>
+
+                        <div class="features">
+                            @for (comodidad of roomDetail?.comodidades; track $index) {
+                            <span class="feature">{{getAmenityData(comodidad).label}}</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

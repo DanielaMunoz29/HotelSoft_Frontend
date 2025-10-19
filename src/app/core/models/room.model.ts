@@ -1,9 +1,9 @@
 export interface Room {
-    id: number;
+    idHabitacion: number;
     nombreHabitacion: string;
     numeroHabitacion: string;
     descripcion?: string;
-    estadoHabitacion?: string;
+    estadoHabitacion: string;
     tipoHabitacion: string;
     precio: number;
     comodidades: string[];

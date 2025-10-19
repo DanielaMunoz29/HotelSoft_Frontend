@@ -10,6 +10,8 @@ import Swal from 'sweetalert2';
 import { AuthService } from '../core/services/auth.service';
 import { Router } from '@angular/router';
 
+declare var bootstrap: any;
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -30,10 +32,20 @@ export class HomeComponent {
     fechaSalida: new Date()
   };
 
- // Lista de comodidades 
+  // Lista de comodidades 
   amenitiesList = AMENITIES_LIST;
 
   bookingFormSubmitted = false;
+
+  roomSearchParams: {
+    type: string,
+    checkInDate: Date | null,
+    checkOutDate: Date | null,
+  } = {
+      type: '',
+      checkInDate: null,
+      checkOutDate: null
+    };
 
   constructor(
     private roomService: RoomService,
@@ -48,7 +60,7 @@ export class HomeComponent {
 
   // Cargar habitaciones
   loadRooms() {
-    this.roomService.getRooms().subscribe({
+    this.roomService.getRoomsByStatus("DISPONIBLE").subscribe({
       next: (data) => {
         this.rooms = data.content;
         // Seleccionar 3 habitaciones aleatorias para el carrusel (sin repetir)
@@ -69,10 +81,8 @@ export class HomeComponent {
   }
 
   searchRooms() {
-    this.roomService.getRooms().subscribe({
-      next: (data) => {
-        this.rooms = data.content;
-      }
+    this.roomService.getRoomsFiltered(this.roomSearchParams).subscribe({
+      next: (data) => this.rooms = data.content
     });
   }
 
@@ -86,7 +96,14 @@ export class HomeComponent {
     }
 
     this.booking.idUsuario = this.authService.getStoredUserData()?.idUsuario || 0;
-    this.booking.idHabitacion = room.id;
+    this.booking.idHabitacion = room.idHabitacion;
+
+    // Abrir el modal manualmente
+    const modalElement = document.getElementById('bookingModal');
+    if (modalElement) {
+      const modal = new bootstrap.Modal(modalElement);
+      modal.show();
+    }
   }
 
   // Crear reserva
@@ -97,9 +114,21 @@ export class HomeComponent {
       return;
     }
 
-    this.bookingService.createBooking(this.booking).subscribe({
+    // Prepare a payload with ISO strings for the backend while keeping this.booking as Date objects
+    const payload: any = {
+      ...this.booking,
+      fechaEntrada: new Date(this.booking.fechaEntrada).toISOString().slice(0, 19),
+      fechaSalida: new Date(this.booking.fechaSalida).toISOString().slice(0, 19)
+    };
+
+    this.bookingService.createBooking(payload).subscribe({
       next: (data) => {
         Swal.fire('Reserva creada', 'La reserva se ha creado correctamente.', 'success');
+        this.bookingFormSubmitted = false;
+        form.resetForm();
+      },
+      error: (error) => {
+        Swal.fire('Error', 'Hubo un error al crear la reserva.', 'error');
       }
     });
   }

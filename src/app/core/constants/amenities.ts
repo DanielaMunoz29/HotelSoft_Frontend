@@ -16,11 +16,11 @@ export const AMENITIES_LIST = [
   { label: 'Minibar', value: 'MINIBAR', icon: 'bi bi-cup-straw' },
   { label: 'Caja Fuerte', value: 'CAJA_FUERTE', icon: 'bi bi-safe' },
   { label: 'Secador de Cabello', value: 'SECADOR_CABELLO', icon: '' },
-  { label: 'Plancha', value: 'PLANCHA', icon: '' },
+  { label: 'Plancha', value: 'PLANCHA_TABLA_PLANCHAR', icon: '' },
   { label: 'Cafetera', value: 'CAFETERA', icon: 'bi bi-cup-hot' },
-  { label: 'Lavandería', value: 'LAVANDERIA', icon: '' },
+  { label: 'Lavandería', value: 'SERVICIO_LAVANDERIA', icon: '' },
   { label: 'Balcón', value: 'BALCON', icon: '' },
   { label: 'Jacuzzi', value: 'JACUZZI', icon: '' },
   { label: 'Sala de Estar', value: 'SALA_ESTAR', icon: '' },
-  { label: 'Bata/Pantuflas', value: 'BATA_PANTUFLAS', icon: '' }
+  { label: 'Bata/Pantuflas', value: 'ALBORNOZ_PANTUFLAS', icon: '' }
 ];

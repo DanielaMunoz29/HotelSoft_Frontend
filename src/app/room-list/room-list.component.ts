@@ -5,6 +5,8 @@ import { RoomService } from '../core/services/room.service';
 import { Room } from '../core/models/room.model';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/internal/Observable';
+import { AMENITIES_LIST } from '../core/constants/amenities';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-room-list',
@@ -17,6 +19,17 @@ export class RoomListComponent {
   rooms: Room[] = [];
   roomDetail: Room | null = null;
 
+  roomSearchParams: {
+    type: string,
+    status: string
+  } = {
+    type: '',
+    status: ''
+  };
+
+  // Lista de comodidades 
+  amenitiesList = AMENITIES_LIST;
+
   constructor(
     private roomService: RoomService,
     private router: Router
@@ -24,6 +37,12 @@ export class RoomListComponent {
 
   ngOnInit() {
     this.loadRooms();
+  }
+
+  // Obtener datos de la comodidad
+  getAmenityData(value: string): any {
+    const amenity = this.amenitiesList.find(a => a.value === value);
+    return amenity ? amenity : { label: value, icon: '' };
   }
 
   // Cargar habitaciones
@@ -35,7 +54,9 @@ export class RoomListComponent {
 
   // Buscar habitaciones por número o tipo
   searchRooms() {
-    
+    this.roomService.getRoomsFiltered(this.roomSearchParams).subscribe({
+      next: (data) => this.rooms = data.content
+    });
   }
 
   // Mostrar detalles de la habitación Modal
@@ -52,11 +73,27 @@ export class RoomListComponent {
     this.router.navigate(['/room-form', id]);
   }
 
-  // Eliminar habitación
-  deleteRoom(roomNumber: string) {
-    this.roomService.deleteRoom(Number(roomNumber)).subscribe({
+  updateRoomStatus(roomNumber: string, newStatus: string) {
+    this.roomService.updateRoomStatus(roomNumber, newStatus).subscribe({
       next: () => {
         this.loadRooms();
+        Swal.fire('Éxito', 'El estado de la habitación ha sido actualizado.', 'success');
+      },
+      error: () => {
+        Swal.fire('Error', 'No se pudo actualizar el estado de la habitación.', 'error');
+      }
+    });
+  }
+
+  // Eliminar habitación
+  deleteRoom(roomNumber: string) {
+    this.roomService.deleteRoom(roomNumber).subscribe({
+      next: () => {
+        this.loadRooms();
+        Swal.fire('Éxito', 'La habitación ha sido eliminada.', 'success');
+      },
+      error: () => {
+        Swal.fire('Error', 'No se pudo eliminar la habitación.', 'error');
       }
     });
   }

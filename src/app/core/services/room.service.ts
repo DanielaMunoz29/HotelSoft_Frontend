@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Room } from '../models/room.model';
 
@@ -24,12 +24,19 @@ export class RoomService {
     return this.http.get<Room[]>(`${this.apiUrl}/tipo/${type}`);
   }
 
-  getRoomsFiltered(type: string, checkInDate: number, checkOutDate: number): Observable<Room[]> {
-    return this.http.get<Room[]>(`${this.apiUrl}/filter`, {
+  getRoomsByStatus(status: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/estado/${status}`);
+  }
+
+  getRoomsFiltered(roomSearchParams: any): Observable<any> {
+    console.log('Filtering rooms with params:', roomSearchParams);
+
+    return this.http.get<any>(`${this.apiUrl}/filter`, {
       params: {
-        tipo: type,
-        fechaEntrada: checkInDate,
-        fechaSalida: checkOutDate
+        tipo: roomSearchParams.type || '',
+        estado: roomSearchParams.status || '',
+        fechaEntrada: roomSearchParams.checkInDate ? new Date(roomSearchParams.checkInDate).toISOString().slice(0, 19) : new Date("1900-01-01").toISOString().slice(0, 19),
+        fechaSalida: roomSearchParams.checkInDate ? new Date(roomSearchParams.checkOutDate).toISOString().slice(0, 19) : new Date("3000-01-01").toISOString().slice(0, 19)
       }
     });
   }
@@ -55,7 +62,12 @@ export class RoomService {
     return this.http.put<Room>(`${this.apiUrl}/${id}`, room);
   }
 
-  deleteRoom(numeroHabitacion: number): Observable<any> {
+  updateRoomStatus(numeroHabitacion: string, newStatus: string): Observable<Room> {
+    const params = new HttpParams().set('nuevoEstado', newStatus);
+    return this.http.patch<Room>(`${this.apiUrl}/${numeroHabitacion}/estado`, params);
+  }
+
+  deleteRoom(numeroHabitacion: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${numeroHabitacion}`);
   }
 }

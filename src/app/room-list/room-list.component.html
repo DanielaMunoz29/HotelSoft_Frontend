@@ -5,7 +5,7 @@
       <div class="row">
         <div class="col-4">
           <div class="form-floating">
-            <select name="roomType" id="roomType" class="form-select">
+            <select name="roomType" id="roomType" class="form-select" [(ngModel)]="roomSearchParams.type">
               <option value="" selected>Seleccione una opción</option>
               <option value="SENCILLA">Sencilla</option>
               <option value="DOBLE">Doble</option>
@@ -17,7 +17,7 @@
         </div>
         <div class="col-4">
           <div class="form-floating">
-            <select name="roomStatus" id="roomStatus" class="form-select">
+            <select name="roomStatus" id="roomStatus" class="form-select" [(ngModel)]="roomSearchParams.status">
               <option value="" selected>Seleccione una opción</option>
               <option value="DISPONIBLE">Disponible</option>
               <option value="NO_DISPONIBLE">No Disponible</option>
@@ -35,10 +35,11 @@
   </div>
   <div class="d-flex justify-content-center bg-white my-5 rounded-4 p-5">
     @if (rooms.length) {
-    <table class="table table-striped-columns table-hover table-borderless">
+    <table class="table table-striped-columns table-hover table-borderless align-middle">
       <thead>
         <tr>
           <th scope="col">#</th>
+          <th scope="col">Portada</th>
           <th scope="col">Precio / noche</th>
           <th scope="col">Descripción</th>
           <th scope="col">Estado</th>
@@ -49,19 +50,38 @@
       <tbody>
         @for (room of rooms; track $index) {
         <tr>
-          <th scope="row">{{room.id}}</th>
+          <th scope="row">{{room.idHabitacion}}</th>
+          <td>
+            <img src="{{ room.imagenes[0] }}" alt="Imagen habitación {{ room.numeroHabitacion }}"
+              style="width: 100px; height: 75px; object-fit: cover;" />
+          </td>
           <td>{{room.precio | currency:'COP':'symbol-narrow':'1.0' }}</td>
           <td>{{room.descripcion}}</td>
-          <td>{{room.estadoHabitacion}}</td>
+          <td>
+            <form action="">
+              <select class="form-select" name="roomStatusSelect" id="roomStatusSelect"
+                [(ngModel)]="room.estadoHabitacion"
+                (change)="updateRoomStatus(room.numeroHabitacion, room.estadoHabitacion)">
+                <option value="DISPONIBLE" [selected]="room.estadoHabitacion === 'DISPONIBLE'">Disponible</option>
+                <option value="NO_DISPONIBLE" [selected]="room.estadoHabitacion === 'NO_DISPONIBLE'">No Disponible
+                </option>
+                <option value="MANTENIMIENTO" [selected]="room.estadoHabitacion === 'MANTENIMIENTO'">Mantenimiento
+                </option>
+                <option value="ASEO" [selected]="room.estadoHabitacion === 'ASEO'">Aseo</option>
+              </select>
+            </form>
+          </td>
           <td>{{room.tipoHabitacion}}</td>
-          <td class="d-flex justify-content-center gap-3">
+          <td>
             <!-- Acciones -->
-            <button class="btn btn-primary" title="Ver detalles" data-bs-toggle="modal"
-              data-bs-target="#roomDetailModal" (click)="openRoomDetail(room)"><i class="bi bi-info-lg"></i></button>
-            <button class="btn btn-secondary" title="Editar" (click)="editRoom(room.id)"><i
-                class="bi bi-pencil-fill"></i></button>
-            <button class="btn btn-danger" title="Eliminar" (click)="deleteRoom(room.numeroHabitacion)"><i
-                class="bi bi-trash-fill"></i></button>
+            <div class="d-flex justify-content-center gap-3">
+              <button class="btn btn-primary" title="Ver detalles" data-bs-toggle="modal"
+                data-bs-target="#roomDetailModal" (click)="openRoomDetail(room)"><i class="bi bi-info-lg"></i></button>
+              <button class="btn btn-secondary" title="Editar" (click)="editRoom(room.idHabitacion)"><i
+                  class="bi bi-pencil-fill"></i></button>
+              <button class="btn btn-danger" title="Eliminar" (click)="deleteRoom(room.numeroHabitacion)"><i
+                  class="bi bi-trash-fill"></i></button>
+            </div>
           </td>
         </tr>
         }
@@ -102,35 +122,38 @@
             <span class="visually-hidden">Next</span>
           </button>
         </div>
-        <div class="room-details p-5 position-relative">
-          @if (roomDetail) {
-          <div>
-            <h2>#{{ roomDetail.id }}</h2>
-            @switch (roomDetail.tipoHabitacion) {
+        <div class="room-content">
+          <div class="room-header">
+            <h3 class="room-name">{{roomDetail?.nombreHabitacion}}</h3>
+            @switch (roomDetail?.tipoHabitacion) {
             @case ('SENCILLA') {
-            <span class="room-type-badge simple position-absolute top-0 end-0 m-5">{{ roomDetail.tipoHabitacion |
-              uppercase }}</span>
+            <span class="room-type-badge simple">{{ roomDetail?.tipoHabitacion | uppercase }}</span>
             }
             @case ('DOBLE') {
-            <span class="room-type-badge double position-absolute top-0 end-0 m-5">{{ roomDetail.tipoHabitacion |
-              uppercase }}</span>
+            <span class="room-type-badge double">{{ roomDetail?.tipoHabitacion | uppercase }}</span>
             }
             @case ('SUITE') {
-            <span class="room-type-badge suite position-absolute top-0 end-0 m-5">{{ roomDetail.tipoHabitacion |
-              uppercase }}</span>
+            <span class="room-type-badge suite">{{ roomDetail?.tipoHabitacion | uppercase }}</span>
             }
             @case ('FAMILIAR') {
-            <span class="room-type-badge familiar position-absolute top-0 end-0 m-5">{{ roomDetail.tipoHabitacion |
-              uppercase }}</span>
+            <span class="room-type-badge familiar">{{ roomDetail?.tipoHabitacion | uppercase }}</span>
             }
             }
-
-            <p class="price">{{ roomDetail.precio | currency:'COP':'symbol':'1.0'}} / noche</p>
-            <p>{{ roomDetail.descripcion }}</p>
           </div>
-          } @else {
-          <p>No se encontró la información de la habitación</p>
-          }
+
+          <div class="room-details">
+            <p class="room-description">{{roomDetail?.descripcion}}</p>
+
+            <div class="price-info">
+              <span class="price">{{roomDetail?.precio | currency:'COP':'symbol':'1.0'}} / noche</span>
+            </div>
+
+            <div class="features">
+              @for (comodidad of roomDetail?.comodidades; track $index) {
+              <span class="feature">{{getAmenityData(comodidad).label}}</span>
+              }
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -5,6 +5,60 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Contenido de la habitación */
+.room-content {
+  padding: 1.5rem;
+}
+
+.room-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.room-details {
+  margin-bottom: 1.5rem;
+}
+
+.room-name {
+  font-size: 1.3rem;
+  color: #1a2a3a;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.price-info {
+  margin-bottom: 1rem;
+}
+
+.price {
+  font-size: 1.5rem !important;
+  font-weight: 700;
+  color: #1a2a3a;
+  display: block;
+}
+
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.feature {
+  font-size: 0.9rem;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.feature:before {
+  content: "✓";
+  color: #10b981;
+  font-weight: bold;
+}
+
 /* Badge tipo de habitación */
 .room-type-badge {
   padding: 5px 15px;

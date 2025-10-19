@@ -4,33 +4,148 @@
   background: linear-gradient(135deg, #1a2a3a 0%, #2d4a5c 50%, #3a6b7a 100%);
 }
 
+.booking-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.booking-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.booking-container-img {
+  height: 280px;
+}
+
+.booking-container-img img {
+  object-fit: cover;
+  border-right: 1px solid #e5e7eb;
+}
+
+.booking-container-info {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #fff;
+}
+
 .booking-status {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   font-weight: 600;
-  padding: 4px 10px;
-  border-radius: 15px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  text-transform: capitalize;
 }
 
-.booking-status.confirmed {
-  background: #d1fae5;
-  color: #065f46;
+/* Estados de la reserva */
+.booking-status.confirmado {
+  background: #dcfce7;
+  color: #166534;
 }
 
-.booking-status.pending {
-  background: #fef3c7;
+.booking-status.pendiente {
+  background: #fef9c3;
   color: #92400e;
 }
 
-.booking-status.cancelled {
+.booking-status.cancelado {
   background: #fee2e2;
   color: #991b1b;
 }
 
-.booking-status.unknown {
+.booking-status.desconocido {
   background: #e2e8f0;
-  color: #4b5563;
+  color: #475569;
 }
 
-.booking-container-img, .booking-container-info {
-    height: 230px;
+.btn {
+  border-radius: 25px;
+  font-weight: 500;
+  padding: 6px 16px;
+  transition: all 0.2s ease;
+}
+
+.btn:hover {
+  transform: scale(1.03);
+}
+
+/* Contenido de la habitación */
+.room-content {
+  padding: 1.5rem;
+}
+
+.room-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.room-details {
+  margin-bottom: 1.5rem;
+}
+
+.room-name {
+  font-size: 1.3rem;
+  color: #1a2a3a;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.price-info {
+  margin-bottom: 1rem;
+}
+
+.price {
+  font-size: 1.5rem !important;
+  font-weight: 700;
+  color: #1a2a3a;
+  display: block;
+}
+
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.feature {
+  font-size: 0.9rem;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.feature:before {
+  content: "✓";
+  color: #10b981;
+  font-weight: bold;
+}
+
+
+/* Badge tipo de habitación */
+.room-type-badge {
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.room-type-badge.simple {
+  background: linear-gradient(45deg, #00668f, #2fa6d4, #00668f);
+  color: #ffffff;
+}
+
+.room-type-badge.double {
+  background: linear-gradient(45deg, #b8860b, #ffd700, #b8860b);
+}
+
+.room-type-badge.suite {
+  background: linear-gradient(45deg, #525150, #b8b8b7, #525150);
+}
+
+.room-type-badge.familiar {
+  background: linear-gradient(45deg, #346e31, #56aa52, #346e31);
+  color: #ffffff;
 }

@@ -4,7 +4,7 @@
         <form #roomForm="ngForm" (ngSubmit)="onSubmit(roomForm)" novalidate>
             @if (isEditMode) {
             <div class="mb-2">
-                <span class="fst-italic">#{{room.id}}</span>
+                <span class="fst-italic">#{{room.idHabitacion}}</span>
             </div>
             }
             <!-- Nombre habitacion -->
@@ -42,22 +42,6 @@
                 }
                 }
             </div>
-
-            @if (isEditMode) {
-            <!-- Estado habitacion -->
-            <div class="form-floating mb-3">
-                <select class="form-select" name="roomStatus" id="roomStatus" placeholder="Estado" required
-                    [(ngModel)]="room.estadoHabitacion" #roomStatus="ngModel">
-                    <option value="" selected>Seleccione una opción</option>
-                    <option value="DISPONIBLE">Disponible</option>
-                    <option value="NO_DISPONIBLE">No Disponible</option>
-                    <option value="MANTENIMIENTO">Mantenimiento</option>
-                    <option value="ASEO">Aseo</option>
-                </select>
-                <label for="roomStatus">Estado</label>
-                <div class="invalid-feedback">El estado de la habitación es obligatorio.</div>
-            </div>
-            }
 
             <!-- Tipo habitacion -->
             <div class="form-floating mb-3">

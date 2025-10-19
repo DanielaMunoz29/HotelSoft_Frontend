@@ -22,7 +22,7 @@ export class BookingService {
   }
 
   getBookingsByUserId(idUsuario: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/usuario/${idUsuario}`);
+    return this.http.get<any>(`${this.apiUrl}/user/${idUsuario}`);
   }
 
   createBooking(bookingData: Booking) {

@@ -11,12 +11,10 @@
       <div class="col-lg-10">
         <div id="hotelCarousel" class="carousel slide custom-carousel">
           <div class="carousel-indicators">
-            <button type="button" data-bs-target="#hotelCarousel" data-bs-slide-to="0" class="active"
-              aria-current="true" aria-label="Habitación Deluxe"></button>
-            <button type="button" data-bs-target="#hotelCarousel" data-bs-slide-to="1"
-              aria-label="Suite Ejecutiva"></button>
-            <button type="button" data-bs-target="#hotelCarousel" data-bs-slide-to="2"
-              aria-label="Habitación Estándar"></button>
+            @for (room of carouselRooms; track $index) {
+            <button type="button" data-bs-target="#hotelCarousel" [attr.data-bs-slide-to]="$index" [ngClass]="$index === 0 ? 'active' : ''"
+              aria-current="true" aria-label="{{ room.nombreHabitacion }}"></button>
+            }
           </div>
 
           <div class="carousel-inner rounded">
@@ -29,7 +27,7 @@
                   <h5>{{ room.nombreHabitacion }}</h5>
                   <p>{{ room.descripcion}}</p>
                   <h4 class="price">{{ room.precio | currency:'COP':'symbol':'1.0' }} / noche</h4>
-                  <button class="btn btn-primary">Reservar Ahora</button>
+                  <button type="button" class="btn btn-primary" (click)="openBookingModal(room)">Reservar ahora</button>
                 </div>
               </div>
             </div>
@@ -58,7 +56,7 @@
               <div class="row">
                 <div class="col-3">
                   <div class="form-floating">
-                    <select name="roomType" id="roomType" class="form-select">
+                    <select name="roomType" id="roomType" class="form-select" [(ngModel)]="roomSearchParams.type">
                       <option value="" selected>Seleccione una opción</option>
                       <option value="SENCILLA">Sencilla</option>
                       <option value="DOBLE">Doble</option>
@@ -70,13 +68,13 @@
                 </div>
                 <div class="col-3">
                   <div class="form-floating">
-                    <input type="date" class="form-control" id="checkInDate" name="checkInDate" placeholder="Fecha de Inicio">
+                    <input type="date" class="form-control" id="checkInDate" name="checkInDate" placeholder="Fecha de Inicio" [(ngModel)]="roomSearchParams.checkInDate">
                     <label for="checkInDate">Fecha de Inicio</label>
                   </div>
                 </div>
                 <div class="col-3">
                   <div class="form-floating">
-                    <input type="date" class="form-control" id="checkOutDate" name="checkOutDate" placeholder="Fecha de Fin">
+                    <input type="date" class="form-control" id="checkOutDate" name="checkOutDate" placeholder="Fecha de Fin" [(ngModel)]="roomSearchParams.checkOutDate">
                     <label for="checkOutDate">Fecha de Fin</label>
                   </div>
                 </div>
@@ -93,8 +91,7 @@
             @for (room of rooms; track $index) {
             <div class="room-card">
               <div class="room-image">
-                <img src="{{room.imagenes[0]}}" alt="Oferta con desayuno">
-                <div class="offer-badge">Incluye desayuno</div>
+                <img src="{{room.imagenes[0]}}" alt="{{room.nombreHabitacion}}" />
               </div>
 
               <div class="room-content">
@@ -130,8 +127,7 @@
                   </div>
                 </div>
 
-                <button type="button" class="room-btn" data-bs-toggle="modal" data-bs-target="#bookingModal"
-                  (click)="openBookingModal(room)">Reservar</button>
+                <button type="button" class="room-btn" (click)="openBookingModal(room)">Reservar</button>
               </div>
             </div>
             }
