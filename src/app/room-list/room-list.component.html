@@ -1,61 +1,97 @@
 <div class="room-list-container">
-    <h2 class="text-center text-white mb-5">Habitaciones</h2>
-    <div class="d-flex justify-content-center bg-white my-5 rounded-4 p-5">
-        @if (rooms.length > 0) {
-        <table class="table table-striped-columns table-hover table-borderless">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Precio / noche</th>
-                    <th scope="col">Descripción</th>
-                    <th scope="col">Tipo</th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                @for (room of rooms; track $index) {
-                <tr>
-                    <th scope="row">{{room.id}}</th>
-                    <td>{{room.price | currency:'COP':'symbol-narrow':'1.0' }}</td>
-                    <td>{{room.description}}</td>
-                    <td>{{room.type}}</td>
-                    <td class="d-flex justify-content-center gap-3">
-                        <!-- Acciones -->
-                        <button class="btn btn-primary" title="Ver detalles" data-bs-toggle="modal" data-bs-target="#roomDetailModal"><i class="bi bi-info-lg"></i></button>
-                        <button class="btn btn-secondary" title="Editar"><i class="bi bi-pencil-fill"></i></button>
-                        <button class="btn btn-danger" title="Eliminar"><i class="bi bi-trash-fill"></i></button>
-                    </td>
-                </tr>
-                }
-            </tbody>
-        </table>
-        } @else {
-        <div class="text-center py-4 text-muted">
-            Cargando habitaciones...
+  <h2 class="text-center text-white mb-5">Habitaciones</h2>
+  <div class="bg-white p-4 rounded-3 shadow-sm mb-5">
+    <form #roomSearchFilter="ngForm">
+      <div class="row">
+        <div class="col-4">
+          <div class="form-floating">
+            <select name="roomType" id="roomType" class="form-select">
+              <option value="" selected>Seleccione una opción</option>
+              <option value="SENCILLA">Sencilla</option>
+              <option value="DOBLE">Doble</option>
+              <option value="SUITE">Suite</option>
+              <option value="FAMILIAR">Familiar</option>
+            </select>
+            <label for="roomType">Tipo de Habitación</label>
+          </div>
         </div>
+        <div class="col-4">
+          <div class="form-floating">
+            <select name="roomStatus" id="roomStatus" class="form-select">
+              <option value="" selected>Seleccione una opción</option>
+              <option value="DISPONIBLE">Disponible</option>
+              <option value="NO_DISPONIBLE">No Disponible</option>
+              <option value="MANTENIMIENTO">Mantenimiento</option>
+              <option value="ASEO">Aseo</option>
+            </select>
+            <label for="roomStatus">Estado</label>
+          </div>
+        </div>
+        <div class="col-4">
+          <button type="submit" class="btn btn-primary w-100 h-100" (click)="searchRooms()">Buscar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="d-flex justify-content-center bg-white my-5 rounded-4 p-5">
+    @if (rooms.length) {
+    <table class="table table-striped-columns table-hover table-borderless">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Precio / noche</th>
+          <th scope="col">Descripción</th>
+          <th scope="col">Estado</th>
+          <th scope="col">Tipo</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (room of rooms; track $index) {
+        <tr>
+          <th scope="row">{{room.id}}</th>
+          <td>{{room.precio | currency:'COP':'symbol-narrow':'1.0' }}</td>
+          <td>{{room.descripcion}}</td>
+          <td>{{room.estadoHabitacion}}</td>
+          <td>{{room.tipoHabitacion}}</td>
+          <td class="d-flex justify-content-center gap-3">
+            <!-- Acciones -->
+            <button class="btn btn-primary" title="Ver detalles" data-bs-toggle="modal"
+              data-bs-target="#roomDetailModal" (click)="openRoomDetail(room)"><i class="bi bi-info-lg"></i></button>
+            <button class="btn btn-secondary" title="Editar" (click)="editRoom(room.id)"><i
+                class="bi bi-pencil-fill"></i></button>
+            <button class="btn btn-danger" title="Eliminar" (click)="deleteRoom(room.numeroHabitacion)"><i
+                class="bi bi-trash-fill"></i></button>
+          </td>
+        </tr>
         }
+      </tbody>
+    </table>
+    } @else {
+    <div class="text-center py-4 text-muted">
+      No se encontraron habitaciones
     </div>
+    }
+  </div>
 </div>
 
-<div class="modal fade " id="roomDetailModal" tabindex="-1" aria-labelledby="roomDetailModal" aria-hidden="true">
+<div class="modal fade " id="roomDetailModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="roomDetailModal" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Detalle habitación</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+          (click)="clearRoomDetail()"></button>
       </div>
       <div class="modal-body p-0">
         <div id="roomDetailImg" class="carousel slide" data-bs-ride="carousel">
           <div class="carousel-inner">
-            <div class="carousel-item active">
-              <img src="/habitacionSuiteEjecutiva.jpg" style="object-fit: cover; height: 400px;" class="d-block w-100">
+            @for (imagenURL of roomDetail?.imagenes; track $index) {
+            <div [ngClass]="$index === 0 ? 'carousel-item active' : 'carousel-item'">
+              <img src="{{ imagenURL }}" style="object-fit: cover; height: 400px;" class="d-block w-100">
             </div>
-            <div class="carousel-item">
-              <img src="/habitacionDelux.jpg" style="object-fit: cover; height: 400px;" class="d-block w-100">
-            </div>
-            <div class="carousel-item">
-              <img src="/habitaciontriple.png" style="object-fit: cover; height: 400px;" class="d-block w-100">
-            </div>
+            }
           </div>
           <button class="carousel-control-prev" type="button" data-bs-target="#roomDetailImg" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -70,23 +106,27 @@
           @if (roomDetail) {
           <div>
             <h2>#{{ roomDetail.id }}</h2>
-            @switch (roomDetail.type) {
-              @case ('sencilla') {
-                <span class="room-type-badge simple position-absolute top-0 end-0 m-5">{{ roomDetail.type | uppercase }}</span>
-              }
-              @case ('doble') {
-                <span class="room-type-badge double position-absolute top-0 end-0 m-5">{{ roomDetail.type | uppercase }}</span>
-              }
-              @case ('suite') {
-                <span class="room-type-badge suite position-absolute top-0 end-0 m-5">{{ roomDetail.type | uppercase }}</span>
-              }
-              @case ('familiar') {
-                <span class="room-type-badge familiar position-absolute top-0 end-0 m-5">{{ roomDetail.type | uppercase }}</span>
-              }
+            @switch (roomDetail.tipoHabitacion) {
+            @case ('SENCILLA') {
+            <span class="room-type-badge simple position-absolute top-0 end-0 m-5">{{ roomDetail.tipoHabitacion |
+              uppercase }}</span>
+            }
+            @case ('DOBLE') {
+            <span class="room-type-badge double position-absolute top-0 end-0 m-5">{{ roomDetail.tipoHabitacion |
+              uppercase }}</span>
+            }
+            @case ('SUITE') {
+            <span class="room-type-badge suite position-absolute top-0 end-0 m-5">{{ roomDetail.tipoHabitacion |
+              uppercase }}</span>
+            }
+            @case ('FAMILIAR') {
+            <span class="room-type-badge familiar position-absolute top-0 end-0 m-5">{{ roomDetail.tipoHabitacion |
+              uppercase }}</span>
+            }
             }
 
-            <p class="price">{{ roomDetail.price | currency:'COP':'symbol':'1.0'}} / noche</p>
-            <p>Description: {{ roomDetail.description }}</p>
+            <p class="price">{{ roomDetail.precio | currency:'COP':'symbol':'1.0'}} / noche</p>
+            <p>{{ roomDetail.descripcion }}</p>
           </div>
           } @else {
           <p>No se encontró la información de la habitación</p>

@@ -4,3 +4,29 @@
     padding: 40px 100px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
+/* Badge tipo de habitación */
+.room-type-badge {
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.room-type-badge.simple {
+  background: linear-gradient(45deg, #00668f, #2fa6d4, #00668f);
+  color: #ffffff;
+}
+
+.room-type-badge.double {
+  background: linear-gradient(45deg, #b8860b, #ffd700, #b8860b);
+}
+
+.room-type-badge.suite {
+  background: linear-gradient(45deg, #525150, #b8b8b7, #525150);
+}
+
+.room-type-badge.familiar {
+  background: linear-gradient(45deg, #346e31, #56aa52, #346e31);
+  color: #ffffff;
+}

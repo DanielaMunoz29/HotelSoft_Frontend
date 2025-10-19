@@ -1,12 +1,11 @@
 export interface Room {
-    id: string;
-    name: string;
-    number: string;
-    description?: string;
-    status?: string;
-    type: string;
-    price: number;
-    amenities: string[];
-    availability: boolean;
-    images: string[];
+    id: number;
+    nombreHabitacion: string;
+    numeroHabitacion: string;
+    descripcion?: string;
+    estadoHabitacion?: string;
+    tipoHabitacion: string;
+    precio: number;
+    comodidades: string[];
+    imagenes: string[];
 }

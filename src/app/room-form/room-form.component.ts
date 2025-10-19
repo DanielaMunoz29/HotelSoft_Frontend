@@ -1,8 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Room } from '../core/models/room.model';
 import { RoomService } from '../core/services/room.service';
+import Swal from 'sweetalert2';
+import { AMENITIES_LIST } from '../core/constants/amenities';
 
 @Component({
   selector: 'app-room-form',
@@ -12,72 +16,88 @@ import { RoomService } from '../core/services/room.service';
 })
 export class RoomFormComponent {
   room: Room = {
-    id: '',
-    name: '',
-    number: '',
-    type: '',
-    price: 0,
-    amenities: [],
-    availability: true,
-    images: []
+    id: 0,
+    nombreHabitacion: '',
+    numeroHabitacion: '',
+    tipoHabitacion: '',
+    precio: 0,
+    estadoHabitacion: '',
+    comodidades: [],
+    imagenes: []
   };
 
-  amenitiesList: { label: string; value: string; icon: string; }[] = [
-    { label: 'Cama Sencilla', value: 'CAMA_SENCILLA', icon: '' },
-    { label: 'Cama Doble', value: 'CAMA_DOBLE', icon: '' },
-    { label: 'Cama Queen', value: 'CAMA_QUEEN', icon: '' },
-    { label: 'Cama King', value: 'CAMA_KING', icon: '' },
-    { label: 'TV', value: 'TV', icon: 'bi bi-tv' },
-    { label: 'WiFi', value: 'WIFI', icon: 'bi bi-wifi' },
-    { label: 'Escritorio', value: 'ESCRITORIO', icon: '' },
-    { label: 'Armario', value: 'ARMARIO', icon: '' },
-    { label: 'Teléfono', value: 'TELEFONO', icon: 'bi bi-telephone' },
-    { label: 'Lampara de Lectura', value: 'LAMPARAS_LECTURA', icon: 'bi bi-lamp' },
-    { label: 'Blackout', value: 'BLACKOUT', icon: '' },
-    { label: 'Minibar', value: 'MINIBAR', icon: 'bi bi-cup-straw' },
-    { label: 'Caja Fuerte', value: 'CAJA_FUERTE', icon: 'bi bi-safe' },
-    { label: 'Secador de Cabello', value: 'SECADOR_CABELLO', icon: '' },
-    { label: 'Plancha', value: 'PLANCHA', icon: '' },
-    { label: 'Cafetera', value: 'CAFETERA', icon: 'bi bi-cup-hot' },
-    { label: 'Lavandería', value: 'LAVANDERIA', icon: '' },
-    { label: 'Balcón', value: 'BALCON', icon: '' },
-    { label: 'Jacuzzi', value: 'JACUZZI', icon: '' },
-    { label: 'Sala de Estar', value: 'SALA_ESTAR', icon: '' },
-    { label: 'Bata/Pantuflas', value: 'BATA_PANTUFLAS', icon: '' }
-  ];
+  amenitiesList = AMENITIES_LIST;
 
   selectedImages: { file: File, url: string }[] = [];
   isDragging = false;
   dragIndex: number | null = null;
 
+  private routeSub!: Subscription;
+
   isEditMode = false;
   submitted = false;
 
   constructor(
-    private roomService: RoomService
+    private roomService: RoomService,
+    private route: ActivatedRoute
   ) {
 
   }
 
   ngOnInit() {
-    // Si es modo edición, cargar datos de la habitación existente
+    //Validar si se recibe id
+    this.routeSub = this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+      if (id) {
+        this.isEditMode = true;
+        this.loadRoom(id);
+      } else {
+        this.isEditMode = false;
+        this.room = {
+          id: 0,
+          nombreHabitacion: '',
+          numeroHabitacion: '',
+          tipoHabitacion: '',
+          precio: 0,
+          estadoHabitacion: '',
+          comodidades: [],
+          imagenes: []
+        }; // resetea el formulario si no hay id
+      }
+    });
+  }
 
+  loadRoom(id: string) {
+    this.roomService.getRoomById(Number(id)).subscribe({
+      next: (data) => {
+        this.room = data;
+      }
+    });
+
+    this.loadSelectedImages();
+  }
+
+  loadSelectedImages() {
+    this.selectedImages = this.room.imagenes.map(url => ({
+      file: new File([], ''), // Archivo vacío, solo para mantener la estructura
+      url
+    }));
   }
 
   // Agregar o quitar una comodidad
   toggleAmenity(amenity: string) {
-    const index = this.room.amenities.indexOf(amenity);
+    const index = this.room.comodidades.indexOf(amenity);
     if (index === -1) {
-      this.room.amenities.push(amenity);
+      this.room.comodidades.push(amenity);
     } else {
-      this.room.amenities.splice(index, 1);
+      this.room.comodidades.splice(index, 1);
     }
-    console.log(this.room.amenities);
+    console.log(this.room.comodidades);
   }
 
   // Verificar si una comodidad está seleccionada
   isAmenitySelected(amenity: string): boolean {
-    return this.room.amenities.includes(amenity);
+    return this.room.comodidades.includes(amenity);
   }
 
   // Cuando el usuario hace clic o selecciona archivos
@@ -158,8 +178,43 @@ export class RoomFormComponent {
   onSubmit(form: NgForm) {
     this.submitted = true;
 
-    // Formulario válido: enviar datos
-    console.log('Datos:', this.room);
-    console.log('Imágenes:', this.selectedImages);
+    if (!this.selectedImages.length) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'No hay imágenes',
+        text: 'Por favor, seleccione imágenes para subir.',
+      });
+      return;
+    }
+
+    if (!this.room.comodidades.length) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Sin comodidades',
+        text: 'Por favor, seleccione al menos una comodidad para la habitación.',
+      });
+      return;
+    }
+
+    if (form.invalid) {
+      return;
+    }
+
+    this.roomService.createRoom(this.room, this.selectedImages.map(img => img.file)).subscribe({
+      next: (data) => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Habitación creada',
+          text: `La habitación ${data.nombreHabitacion} ha sido creada exitosamente.`,
+        });
+      },
+      error: (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: `Hubo un error al crear la habitación: ${error.message}`,
+        });
+      }
+    });
   }
 }

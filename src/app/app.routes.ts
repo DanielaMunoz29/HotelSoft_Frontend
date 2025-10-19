@@ -7,6 +7,7 @@ import { ResetPasswordComponent } from './auth/reset-password/reset-password.com
 import { RoomListComponent } from './room-list/room-list.component';
 import { RoomFormComponent } from './room-form/room-form.component';
 import { BookingListComponent } from './booking-list/booking-list.component';
+import { roleGuard } from './core/guards/role.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -15,8 +16,9 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'reset-password', component: ResetPasswordComponent },
-  { path: 'booking-list', component: BookingListComponent },
-  { path: 'room-list', component: RoomListComponent },
-  { path: 'room-form', component: RoomFormComponent },
+  { path: 'booking-list', component: BookingListComponent, canActivate: [roleGuard(['ADMIN', 'USER'])] },
+  { path: 'room-list', component: RoomListComponent, canActivate: [roleGuard(['ADMIN'])] },
+  { path: 'room-form', component: RoomFormComponent, canActivate: [roleGuard(['ADMIN'])] },
+  { path: 'room-form/:id', component: RoomFormComponent, canActivate: [roleGuard(['ADMIN'])] },
   { path: '**', redirectTo: 'home' }
 ];

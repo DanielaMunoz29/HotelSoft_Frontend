@@ -15,6 +15,7 @@ import { Subscription } from 'rxjs';
 export class HeaderComponent implements OnInit, OnDestroy {
   currentUser: any = null;
   isLoggedIn: boolean = false;
+  isAdmin: boolean = false;
   
   private authSubscription!: Subscription;
   private userSubscription!: Subscription;
@@ -32,6 +33,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.authSubscription = this.authService.isAuthenticated$.subscribe(
       (isAuthenticated) => {
         this.isLoggedIn = isAuthenticated;
+        this.isAdmin = this.authService.getStoredUserData()?.role === 'ADMIN';
         console.log('Estado de autenticación cambiado:', isAuthenticated);
       }
     );

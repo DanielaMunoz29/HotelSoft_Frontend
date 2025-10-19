@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { BookingService } from '../core/services/booking.service';
+import { BookingResponse } from '../core/models/booking-response';
+import { AuthService } from '../core/services/auth.service';
 
 @Component({
   selector: 'app-booking-list',
@@ -8,9 +11,22 @@ import { CommonModule } from '@angular/common';
   styleUrl: './booking-list.component.css'
 })
 export class BookingListComponent {
-  bookings = [
-    { id: 1, room: 'Room 101', checkInDate: '2023-10-01T12:00:00', checkOutDate: '2023-10-05T12:00:00', status: 'confirmed' },
-    { id: 2, room: 'Room 102', checkInDate: '2023-10-05T12:00:00', checkOutDate: '2023-10-10T12:00:00', status: 'pending' },
-    { id: 3, room: 'Room 103', checkInDate: '2023-10-10T12:00:00', checkOutDate: '2023-10-15T12:00:00', status: 'cancelled' }
-  ];
+  bookings: BookingResponse[] = [];
+
+  constructor(
+    private bookingService: BookingService,
+    private authService: AuthService
+  ) { }
+
+  ngOnInit() {
+    this.loadBookings();
+  }
+
+  loadBookings() {
+    const idUsuario = this.authService.getStoredUserData()?.idUsuario || 0;
+
+    this.bookingService.getBookingsByUserId(idUsuario).subscribe({
+      next: (data) => this.bookings = data.content
+    });
+  }
 }

@@ -117,14 +117,14 @@
   font-weight: 700;
 }
 
-/* Grid de ofertas */
-.offers-grid {
+/* Grid de habitaciones */
+.rooms-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: 2rem;
 }
 
-.offer-card {
+.room-card {
   background: white;
   border-radius: 15px;
   overflow: hidden;
@@ -133,19 +133,19 @@
   border: 1px solid #e2e8f0;
 }
 
-.offer-card:hover {
+.room-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
 }
 
-/* Imagen de la oferta */
-.offer-image {
+/* Imagen de la habitación */
+.room-image {
   position: relative;
   height: 200px;
   overflow: hidden;
 }
 
-.offer-image img {
+.room-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -164,22 +164,16 @@
   text-transform: uppercase;
 }
 
-/* Contenido de la oferta */
-.offer-content {
+/* Contenido de la habitación */
+.room-content {
   padding: 1.5rem;
 }
 
-.offer-header {
+.room-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
-}
-
-.rating {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
 }
 
 .score {
@@ -216,18 +210,18 @@
 }
 
 /* Detalles de la oferta */
-.offer-details {
+.room-details {
   margin-bottom: 1.5rem;
 }
 
-.offer-name {
+.room-name {
   font-size: 1.3rem;
   color: #1a2a3a;
   font-weight: 700;
   margin-bottom: 0.5rem;
 }
 
-.offer-description {
+.room-description {
   color: #64748b;
   font-size: 0.95rem;
   margin-bottom: 1rem;
@@ -239,7 +233,7 @@
 }
 
 .price {
-  font-size: 1.5rem;
+  font-size: 1.5rem !important;
   font-weight: 700;
   color: #1a2a3a;
   display: block;
@@ -271,7 +265,7 @@
 }
 
 /* Botón de oferta */
-.offer-btn {
+.room-btn {
   width: 100%;
   background: linear-gradient(135deg, #2d4a5c 0%, #3a6b7a 100%);
   color: white;
@@ -284,9 +278,8 @@
   transition: all 0.3s ease;
 }
 
-.offer-btn:hover {
+.room-btn:hover {
   background: linear-gradient(135deg, #3a6b7a 0%, #4a7c8a 100%);
-  transform: translateY(-2px);
 }
 
 /* Badge tipo de habitación */
@@ -295,7 +288,6 @@
   border-radius: 20px;
   font-size: 0.9rem;
   font-weight: 600;
-  margin-top: 10px;
 }
 
 .room-type-badge.simple {
@@ -342,7 +334,7 @@
     height: 300px;
   }
   
-  .offers-grid {
+  .rooms-grid {
     grid-template-columns: 1fr;
   }
   

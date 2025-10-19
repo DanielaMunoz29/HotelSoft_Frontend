@@ -10,7 +10,7 @@
             <!-- Nombre habitacion -->
             <div class="form-floating mb-3">
                 <input id="roomName" name="roomName" type="text" class="form-control" placeholder="Nombre" required
-                    minlength="1" maxlength="50" [(ngModel)]="room.name" #roomName="ngModel" [ngClass]="submitted && roomName.invalid
+                    minlength="1" maxlength="50" [(ngModel)]="room.nombreHabitacion" #roomName="ngModel" [ngClass]="submitted && roomName.invalid
                   ? 'is-invalid' : '' " />
                 <label for="roomName" class="form-label">Nombre</label>
 
@@ -24,29 +24,45 @@
             <!-- Numero habitacion -->
             <div class="form-floating mb-3">
                 <input id="roomNumber" name="roomNumber" type="text" class="form-control" placeholder="Número" required
-                    (input)="filterNumbers($event)" maxlength="4" [(ngModel)]="room.number" #roomNumber="ngModel"
-                    [ngClass]="submitted && roomNumber.invalid
+                    (input)="filterNumbers($event)" maxlength="4" [(ngModel)]="room.numeroHabitacion"
+                    #roomNumber="ngModel" [ngClass]="submitted && roomNumber.invalid
                   ? 'is-invalid' : '' " />
                 <label for="roomNumber" class="form-label">Número</label>
 
                 @if (submitted && roomNumber.invalid) {
-                    @if (roomNumber.errors?.['required']) {
-                    <div class="invalid-feedback">
-                        El número de habitación es obligatorio.
-                    </div>
-                    }
-                    @if (roomNumber.errors?.['maxlength']) {
-                    <div class="invalid-feedback">
-                        El número de habitación no puede exceder los 4 dígitos.
-                    </div>
-                    }
+                @if (roomNumber.errors?.['required']) {
+                <div class="invalid-feedback">
+                    El número de habitación es obligatorio.
+                </div>
+                }
+                @if (roomNumber.errors?.['maxlength']) {
+                <div class="invalid-feedback">
+                    El número de habitación no puede exceder los 4 dígitos.
+                </div>
+                }
                 }
             </div>
+
+            @if (isEditMode) {
+            <!-- Estado habitacion -->
+            <div class="form-floating mb-3">
+                <select class="form-select" name="roomStatus" id="roomStatus" placeholder="Estado" required
+                    [(ngModel)]="room.estadoHabitacion" #roomStatus="ngModel">
+                    <option value="" selected>Seleccione una opción</option>
+                    <option value="DISPONIBLE">Disponible</option>
+                    <option value="NO_DISPONIBLE">No Disponible</option>
+                    <option value="MANTENIMIENTO">Mantenimiento</option>
+                    <option value="ASEO">Aseo</option>
+                </select>
+                <label for="roomStatus">Estado</label>
+                <div class="invalid-feedback">El estado de la habitación es obligatorio.</div>
+            </div>
+            }
 
             <!-- Tipo habitacion -->
             <div class="form-floating mb-3">
                 <select class="form-select" name="roomType" id="roomType" placeholder="Tipo" required
-                    [(ngModel)]="room.type" #roomType="ngModel">
+                    [(ngModel)]="room.tipoHabitacion" #roomType="ngModel">
                     <option value="" selected>Seleccione una opción</option>
                     <option value="SENCILLA">Sencilla</option>
                     <option value="DOBLE">Doble</option>
@@ -59,16 +75,22 @@
 
             <!-- Precio habitacion -->
             <div class="form-floating mb-3">
-                <input id="roomPrice" name="roomPrice" type="number" class="form-control" min="0" placeholder="Precio"
-                    [(ngModel)]="room.price" #roomPrice="ngModel" required />
+                <input id="roomPrice" name="roomPrice" type="text" class="form-control" placeholder="Precio" (input)="filterNumbers($event)"
+                    [(ngModel)]="room.precio" #roomPrice="ngModel" [ngClass]="submitted && roomPrice.invalid
+                  ? 'is-invalid' : '' " />
                 <label for="roomPrice" class="form-label">Precio</label>
-                <div class="invalid-feedback">El precio es obligatorio.</div>
+
+                @if (submitted && roomPrice.invalid) {
+                <div class="invalid-feedback">
+                    El precio es obligatorio.
+                </div>
+                }
             </div>
 
             <!-- Descripcion habitacion -->
             <div class="form-floating mb-4">
                 <textarea class="form-control" placeholder="Descripcion" id="roomDescription" name="roomDescription"
-                    style="height: 100px" maxlength="200"></textarea>
+                    style="height: 100px" maxlength="200" [(ngModel)]="room.descripcion" #roomDescription="ngModel"></textarea>
                 <label for="roomDescription">Descripcion</label>
             </div>
 

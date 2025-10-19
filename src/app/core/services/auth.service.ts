@@ -333,9 +333,7 @@ export class AuthService {
     if (!token) return false;
 
     try {
-      console.log('Token encontrado:', token);
       const payload = JSON.parse(atob(token.split('.')[1]));
-      console.log('Payload del token:', payload);
       const exp = payload.exp * 1000;
       return Date.now() < exp;
     } catch (error) {

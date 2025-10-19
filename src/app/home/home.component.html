@@ -20,44 +20,20 @@
           </div>
 
           <div class="carousel-inner rounded">
+            @for (room of carouselRooms; track $index) {
             <!-- Habitación Deluxe -->
-            <div class="carousel-item active">
+            <div [ngClass]="$index === 0 ? 'carousel-item active' : 'carousel-item'">
               <div class="carousel-content">
-                <img src="/habitacionDelux.jpg" class="d-block w-100" alt="Habitación Deluxe - HotelSoft">
+                <img src="{{ room.imagenes[0] }}" class="d-block w-100" alt="{{ room.nombreHabitacion }} - HotelSoft">
                 <div class="carousel-caption-custom">
-                  <h5>Habitación Deluxe</h5>
-                  <p>Amplia y elegante con vista privilegiada</p>
-                  <h4 class="price">$200.000 / noche</h4>
+                  <h5>{{ room.nombreHabitacion }}</h5>
+                  <p>{{ room.descripcion}}</p>
+                  <h4 class="price">{{ room.precio | currency:'COP':'symbol':'1.0' }} / noche</h4>
                   <button class="btn btn-primary">Reservar Ahora</button>
                 </div>
               </div>
             </div>
-
-            <!-- Suite Ejecutiva -->
-            <div class="carousel-item">
-              <div class="carousel-content">
-                <img src="/habitacionSuiteEjecutiva.jpg" class="d-block w-100" alt="Suite Ejecutiva - HotelSoft">
-                <div class="carousel-caption-custom">
-                  <h5>Suite Ejecutiva</h5>
-                  <p>Lujo y confort para viajes de negocios</p>
-                  <h4 class="price">$150.000 / noche</h4>
-                  <button class="btn btn-primary">Reservar Ahora</button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Habitación Estándar -->
-            <div class="carousel-item">
-              <div class="carousel-content">
-                <img src="/habitacionEstandar.jpg" class="d-block w-100" alt="Habitación Estándar - HotelSoft">
-                <div class="carousel-caption-custom">
-                  <h5>Habitación Estándar</h5>
-                  <p>Comodidad y elegancia para tu estadía</p>
-                  <h4 class="price">$80.000 / noche</h4>
-                  <button class="btn btn-primary">Reservar Ahora</button>
-                </div>
-              </div>
-            </div>
+            }
           </div>
 
           <button class="carousel-control-prev" type="button" data-bs-target="#hotelCarousel" data-bs-slide="prev">
@@ -72,87 +48,187 @@
       </div>
     </div>
 
-    <!-- Sección de ofertas especiales CORREGIDA -->
+    <!-- Sección de habitaciones -->
     <div class="special-offers">
       <div class="row">
         <div class="col-12">
           <h2 class="section-title">Nuestras Habitaciones</h2>
+          <div class="bg-white p-4 rounded-3 shadow-sm mb-5">
+            <form #roomSearchFilter="ngForm">
+              <div class="row">
+                <div class="col-3">
+                  <div class="form-floating">
+                    <select name="roomType" id="roomType" class="form-select">
+                      <option value="" selected>Seleccione una opción</option>
+                      <option value="SENCILLA">Sencilla</option>
+                      <option value="DOBLE">Doble</option>
+                      <option value="SUITE">Suite</option>
+                      <option value="FAMILIAR">Familiar</option>
+                    </select>
+                    <label for="roomType">Tipo de Habitación</label>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <div class="form-floating">
+                    <input type="date" class="form-control" id="checkInDate" name="checkInDate" placeholder="Fecha de Inicio">
+                    <label for="checkInDate">Fecha de Inicio</label>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <div class="form-floating">
+                    <input type="date" class="form-control" id="checkOutDate" name="checkOutDate" placeholder="Fecha de Fin">
+                    <label for="checkOutDate">Fecha de Fin</label>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <button type="submit" class="btn btn-primary w-100 h-100" (click)="searchRooms()">Buscar</button>
+                </div>
+              </div>
+            </form>
+          </div>
 
-          <div class="offers-grid">
-            <!-- Oferta 1 -->
+          @if (rooms.length) {
+          <div class="rooms-grid">
+            <!-- Card Habitacion -->
             @for (room of rooms; track $index) {
-            <div class="offer-card">
-              <div class="offer-image">
-                <img src="{{room.images[0]}}" alt="Oferta con desayuno">
+            <div class="room-card">
+              <div class="room-image">
+                <img src="{{room.imagenes[0]}}" alt="Oferta con desayuno">
                 <div class="offer-badge">Incluye desayuno</div>
               </div>
 
-              <div class="offer-content">
-                <div class="offer-header">
-                  <div class="rating">
-                    <span class="score">9.3</span>
-                    <span class="reviews">× 52 opiniones</span>
-                  </div>
-                  <span class="offer-status active">Oferta activa</span>
+              <div class="room-content">
+                <div class="room-header">
+                  <h3 class="room-name">{{room.nombreHabitacion}}</h3>
+                  @switch (room.tipoHabitacion) {
+                  @case ('SENCILLA') {
+                  <span class="room-type-badge simple">{{ room.tipoHabitacion | uppercase }}</span>
+                  }
+                  @case ('DOBLE') {
+                  <span class="room-type-badge double">{{ room.tipoHabitacion | uppercase }}</span>
+                  }
+                  @case ('SUITE') {
+                  <span class="room-type-badge suite">{{ room.tipoHabitacion | uppercase }}</span>
+                  }
+                  @case ('FAMILIAR') {
+                  <span class="room-type-badge familiar">{{ room.tipoHabitacion | uppercase }}</span>
+                  }
+                  }
                 </div>
 
-                <div class="offer-details">
-                  <h3 class="offer-name">{{room.name}}</h3>
-                  <p class="offer-description">{{room.description}}</p>
+                <div class="room-details">
+                  <p class="room-description">{{room.descripcion}}</p>
 
                   <div class="price-info">
-                    <span class="price">{{room.price | currency:'COP':'symbol':'1.0'}}</span>
-                    <span class="period">para 2 noches</span>
+                    <span class="price">{{room.precio | currency:'COP':'symbol':'1.0'}} / noche</span>
                   </div>
 
                   <div class="features">
-                    <span class="feature">✓ Desayuno buffet incluido</span>
-                    <span class="feature">✓ Acceso a piscina</span>
-                    <span class="feature">✓ Wifi gratuito</span>
+                    @for (comodidad of room.comodidades; track $index) {
+                    <span class="feature">{{getAmenityData(comodidad).label}}</span>
+                    }
                   </div>
                 </div>
 
-                <button class="offer-btn">Reservar Oferta</button>
+                <button type="button" class="room-btn" data-bs-toggle="modal" data-bs-target="#bookingModal"
+                  (click)="openBookingModal(room)">Reservar</button>
               </div>
             </div>
             }
-            <!-- Oferta 2 -->
-            <div class="offer-card">
-              <div class="offer-image">
-                <img src="/habitacionescamadoble.jpg" alt="Oferta con spa">
-                <div class="offer-badge">Spa incluido</div>
-              </div>
-
-              <div class="offer-content">
-                <div class="offer-header">
-                  <div class="rating">
-                    <span class="score">8.7</span>
-                    <span class="reviews">× 294 opiniones</span>
-                  </div>
-                  <span class="offer-status limited">Promoción limitada</span>
-                </div>
-
-                <div class="offer-details">
-                  <h3 class="offer-name">Suite Ejecutiva</h3>
-                  <p class="offer-description">Lujo y confort para viajes de negocios</p>
-
-                  <div class="price-info">
-                    <span class="price">COP1.200.000</span>
-                    <span class="period">paquete fin de semana</span>
-                  </div>
-
-                  <div class="features">
-                    <span class="feature">✓ Sesión de spa incluida</span>
-                    <span class="feature">✓ Desayuno en habitación</span>
-                    <span class="feature">✓ Estacionamiento gratis</span>
-                  </div>
-                </div>
-
-                <button class="offer-btn">Reservar Oferta</button>
-              </div>
-            </div>
           </div>
+          } @else {
+          <div class="text-center py-4 text-muted">
+            No se encontraron habitaciones.
+          </div>
+          }
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Reserva -->
+<div class="modal fade" id="bookingModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="bookingModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="bookingModalLabel">Reserva</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form #bookingForm="ngForm" novalidate>
+          <!-- Datos del Titular -->
+
+          <!-- Nombre del Titular -->
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="nombreTitular" name="nombreTitular"
+              placeholder="Nombre del Titular" [(ngModel)]="booking.nombreTitular" required #nombreTitular="ngModel"
+              [ngClass]="bookingFormSubmitted && nombreTitular.invalid ? 'is-invalid' : '' " />
+            <label for="nombreTitular">Nombre del Titular</label>
+
+            @if (bookingFormSubmitted && nombreTitular.invalid) {
+            <div class="invalid-feedback">
+              El nombre del titular es obligatorio.
+            </div>
+            }
+          </div>
+
+          <!-- Email del Titular -->
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="email" name="email" placeholder="Email"
+              [(ngModel)]="booking.email" required email #email="ngModel"
+              [ngClass]="bookingFormSubmitted && email.invalid ? 'is-invalid' : '' " />
+            <label for="email">Email</label>
+
+            @if (bookingFormSubmitted && email.invalid) {
+            <div class="invalid-feedback">
+              El email del titular es obligatorio.
+            </div>
+            }
+          </div>
+
+          <!-- Teléfono del Titular -->
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Teléfono"
+              [(ngModel)]="booking.telefono" required pattern="^[0-9]+$" #telefono="ngModel"
+              [ngClass]="bookingFormSubmitted && telefono.invalid ? 'is-invalid' : '' " />
+            <label for="telefono">Teléfono</label>
+
+            @if (bookingFormSubmitted && telefono.invalid) {
+            @if (telefono.errors?.['required']) {
+            <div class="invalid-feedback">
+              El teléfono del titular es obligatorio.
+            </div>
+            }
+            @if (telefono.errors?.['pattern']) {
+            <div class="invalid-feedback">
+              El teléfono del titular debe ser un número válido.
+            </div>
+            }
+            }
+          </div>
+
+          <!-- Fecha de entrada -->
+          <div class="form-floating mb-3">
+            <input type="date" class="form-control" id="fechaEntrada" name="fechaEntrada" placeholder="Fecha de Entrada"
+              [(ngModel)]="booking.fechaEntrada" required #fechaEntrada="ngModel"
+              [ngClass]="bookingFormSubmitted && fechaEntrada.invalid ? 'is-invalid' : '' " />
+            <label for="fechaEntrada">Fecha de Entrada</label>
+          </div>
+
+          <!-- Fecha de salida -->
+          <div class="form-floating mb-3">
+            <input type="date" class="form-control" id="fechaSalida" name="fechaSalida" placeholder="Fecha de Salida"
+              [(ngModel)]="booking.fechaSalida" required #fechaSalida="ngModel"
+              [ngClass]="bookingFormSubmitted && fechaSalida.invalid ? 'is-invalid' : '' " />
+            <label for="fechaSalida">Fecha de Salida</label>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="createBooking(bookingForm)">Reservar</button>
       </div>
     </div>
   </div>
