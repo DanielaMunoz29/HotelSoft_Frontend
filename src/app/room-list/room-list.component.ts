@@ -26,16 +26,19 @@ export class RoomListComponent {
     this.loadRooms();
   }
 
+  // Cargar habitaciones
   loadRooms() {
     this.roomService.getRooms().subscribe({
       next: (data) => this.rooms = data.content
     });
   }
 
+  // Buscar habitaciones por número o tipo
   searchRooms() {
     
   }
 
+  // Mostrar detalles de la habitación Modal
   openRoomDetail(room: Room) {
     this.roomDetail = room;
   }
@@ -44,10 +47,12 @@ export class RoomListComponent {
     this.roomDetail = null;
   }
 
+  // Navegar al formulario de edición
   editRoom(id: number) {
     this.router.navigate(['/room-form', id]);
   }
 
+  // Eliminar habitación
   deleteRoom(roomNumber: string) {
     this.roomService.deleteRoom(Number(roomNumber)).subscribe({
       next: () => {

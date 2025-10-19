@@ -30,6 +30,7 @@ export class HomeComponent {
     fechaSalida: new Date()
   };
 
+ // Lista de comodidades 
   amenitiesList = AMENITIES_LIST;
 
   bookingFormSubmitted = false;
