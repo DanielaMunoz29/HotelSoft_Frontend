@@ -211,11 +211,8 @@ export class RoomFormComponent {
         this.router.navigate(['/room-list']);
       },
       error: (error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: `Hubo un error al crear la habitación: ${error.message}`,
-        });
+        const errorMessage = error.error?.message || 'Hubo un error al crear la habitación.';
+        Swal.fire('Error', errorMessage, 'error');
       }
     });
   }

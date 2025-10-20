@@ -128,7 +128,8 @@ export class HomeComponent {
         form.resetForm();
       },
       error: (error) => {
-        Swal.fire('Error', 'Hubo un error al crear la reserva.', 'error');
+        const errorMessage = error.error?.message || 'Hubo un error al crear la reserva.';
+        Swal.fire('Error', errorMessage, 'error');
       }
     });
   }

@@ -23,9 +23,9 @@ export class RoomListComponent {
     type: string,
     status: string
   } = {
-    type: '',
-    status: ''
-  };
+      type: '',
+      status: ''
+    };
 
   // Lista de comodidades 
   amenitiesList = AMENITIES_LIST;
@@ -79,8 +79,9 @@ export class RoomListComponent {
         this.loadRooms();
         Swal.fire('Éxito', 'El estado de la habitación ha sido actualizado.', 'success');
       },
-      error: () => {
-        Swal.fire('Error', 'No se pudo actualizar el estado de la habitación.', 'error');
+      error: (error) => {
+        const errorMessage = error.error?.message || 'Hubo un error al actualizar la habitación.';
+        Swal.fire('Error', errorMessage, 'error');
       }
     });
   }
@@ -92,8 +93,9 @@ export class RoomListComponent {
         this.loadRooms();
         Swal.fire('Éxito', 'La habitación ha sido eliminada.', 'success');
       },
-      error: () => {
-        Swal.fire('Error', 'No se pudo eliminar la habitación.', 'error');
+      error: (error) => {
+        const errorMessage = error.error?.message || 'Hubo un error al eliminar la habitación.';
+        Swal.fire('Error', errorMessage, 'error');
       }
     });
   }

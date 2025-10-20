@@ -2,9 +2,10 @@
 export interface User {
   id?: number;
   cedula: string;
-  nombre: string;
+  nombreCompleto: string;
   email: string;
-  rol?: string;
+  role?: string;
   telefono?: string;
   contraseña?: string;
+  enabled?: boolean;
 }

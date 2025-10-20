@@ -8,6 +8,8 @@ import { RoomListComponent } from './room-list/room-list.component';
 import { RoomFormComponent } from './room-form/room-form.component';
 import { BookingListComponent } from './booking-list/booking-list.component';
 import { roleGuard } from './core/guards/role.guard';
+import { ContactComponent } from './contact/contact.component';
+import { ProfileComponent } from './profile/profile.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -20,5 +22,7 @@ export const routes: Routes = [
   { path: 'room-list', component: RoomListComponent, canActivate: [roleGuard(['ADMIN'])] },
   { path: 'room-form', component: RoomFormComponent, canActivate: [roleGuard(['ADMIN'])] },
   { path: 'room-form/:id', component: RoomFormComponent, canActivate: [roleGuard(['ADMIN'])] },
+  { path: 'contact', component: ContactComponent },
+  { path: 'profile', component: ProfileComponent, canActivate: [roleGuard(['ADMIN', 'USER'])] },
   { path: '**', redirectTo: 'home' }
 ];

@@ -1,0 +1,46 @@
+<div class="profile-container">
+    <h2 class="text-white text-center mb-5">Perfil</h2>
+    <div class="d-flex justify-content-center">
+        <div class="card mb-3" style="width: 50em;">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <img src="..." class="img-fluid rounded-start" alt="...">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body p-4">
+                        <div class="mb-3">
+                            <span class="text-secondary">#{{ user.id }}</span>
+                        </div>
+                        <form #profileForm="ngForm" novalidate>
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Nombre"
+                                    [(ngModel)]="user.nombreCompleto" required>
+                                <label for="name" class="form-label">Nombre</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="cedula" name="cedula" placeholder="Cédula"
+                                    [(ngModel)]="user.cedula" required>
+                                <label for="cedula" class="form-label">Cédula</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="email" class="form-control" id="email" name="email" placeholder="Correo Electrónico"
+                                    [(ngModel)]="user.email" required email>
+                                <label for="email" class="form-label">Correo Electrónico</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="phone" name="phone" placeholder="Teléfono"
+                                    [(ngModel)]="user.telefono">
+                                <label for="phone" class="form-label">Teléfono</label>
+                            </div>
+                            <div class="mb-4">
+                                <a href="/reset-password">Cambiar Contraseña</a>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Actualizar Perfil</button>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
