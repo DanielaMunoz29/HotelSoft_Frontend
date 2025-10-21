@@ -49,7 +49,7 @@
 
 .auth-image {
   flex: 1;
-  background: url("/hotel.jpg") no-repeat center center;
+  background: url("https://res.cloudinary.com/dvkvps1fy/image/upload/v1760982647/hotel_icepzw.jpg") no-repeat center center;
   background-size: cover;
   position: relative;
 }

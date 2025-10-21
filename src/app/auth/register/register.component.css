@@ -50,7 +50,7 @@
 
 .auth-image {
   flex: 1;
-  background: url("/registro.png") no-repeat center center;
+  background: url("https://res.cloudinary.com/dvkvps1fy/image/upload/v1760982648/registro_dnqyn1.png") no-repeat center center;
   background-size: cover;
   position: relative;
 }

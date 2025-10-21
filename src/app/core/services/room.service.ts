@@ -8,7 +8,7 @@ import { Room } from '../models/room.model';
 })
 export class RoomService {
 
-  private apiUrl = 'http://localhost:8080/api/habitaciones';
+  private apiUrl = 'https://hotelsoft-backend.onrender.com/api/habitaciones';
 
   constructor(private http: HttpClient) { }
 
@@ -29,16 +29,18 @@ export class RoomService {
   }
 
   getRoomsFiltered(roomSearchParams: any): Observable<any> {
-    console.log('Filtering rooms with params:', roomSearchParams);
 
-    return this.http.get<any>(`${this.apiUrl}/filter`, {
-      params: {
-        tipo: roomSearchParams.type || '',
-        estado: roomSearchParams.status || '',
-        fechaEntrada: roomSearchParams.checkInDate ? new Date(roomSearchParams.checkInDate).toISOString().slice(0, 19) : new Date("1900-01-01").toISOString().slice(0, 19),
-        fechaSalida: roomSearchParams.checkInDate ? new Date(roomSearchParams.checkOutDate).toISOString().slice(0, 19) : new Date("3000-01-01").toISOString().slice(0, 19)
-      }
-    });
+    let params = new HttpParams().set('tipo', roomSearchParams.type || '').set('estado', roomSearchParams.status || '');
+
+    if (roomSearchParams.checkInDate) {
+      params = params.set('fechaEntrada', new Date(roomSearchParams.checkInDate).toISOString().slice(0, 19));
+    }
+
+    if (roomSearchParams.checkOutDate) {
+      params = params.set('fechaSalida', new Date(roomSearchParams.checkOutDate).toISOString().slice(0, 19));
+    }
+
+    return this.http.get<any>(`${this.apiUrl}/filter`, { params });
   }
 
   createRoom(room: Room, imagenes: File[]): Observable<Room> {

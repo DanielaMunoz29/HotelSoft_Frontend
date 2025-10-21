@@ -28,14 +28,18 @@ export class HomeComponent {
     nombreTitular: '',
     email: '',
     telefono: '',
-    fechaEntrada: new Date(),
-    fechaSalida: new Date()
+    fechaEntrada: null as any,
+    fechaSalida: null as any,
+    puntos: 0
   };
 
   // Lista de comodidades 
   amenitiesList = AMENITIES_LIST;
 
+  paymentMethod: string = 'pointsCash';
   bookingFormSubmitted = false;
+
+  currentUser: { puntos: number } = { puntos: 0 };
 
   roomSearchParams: {
     type: string,
@@ -74,6 +78,14 @@ export class HomeComponent {
     });
   }
 
+  getCurrentDate(): string {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
   // Obtener datos de la comodidad
   getAmenityData(value: string): any {
     const amenity = this.amenitiesList.find(a => a.value === value);
@@ -104,6 +116,19 @@ export class HomeComponent {
       const modal = new bootstrap.Modal(modalElement);
       modal.show();
     }
+  }
+
+  calculateBookingTotal(): number {
+    const checkIn = new Date(this.booking.fechaEntrada);
+    const checkOut = new Date(this.booking.fechaSalida);
+    const timeDiff = checkOut.getTime() - checkIn.getTime();
+    const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+    // Suponiendo que el precio por noche está en la habitación seleccionada
+    const room = this.rooms.find(r => r.idHabitacion === this.booking.idHabitacion);
+    const pricePerNight = room ? room.precio : 0;
+
+    return daysDiff * pricePerNight;
   }
 
   // Crear reserva

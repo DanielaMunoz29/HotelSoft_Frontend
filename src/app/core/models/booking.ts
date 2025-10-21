@@ -7,4 +7,5 @@ export interface Booking {
     telefono: string;
     fechaEntrada: Date;
     fechaSalida: Date;
+    puntos: number;
 }

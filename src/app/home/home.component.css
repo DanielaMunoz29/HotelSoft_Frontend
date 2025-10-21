@@ -250,6 +250,13 @@
   gap: 0.5rem;
 }
 
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  gap: 10px 5px;
+}
+
 .feature {
   font-size: 0.9rem;
   color: #475569;
@@ -321,6 +328,11 @@
 }
 
 .footer-text strong {
+  color: white;
+}
+
+.modal-header {
+  background: linear-gradient(135deg, #2d4a5c 0%, #3a6b7a 100%);
   color: white;
 }
 

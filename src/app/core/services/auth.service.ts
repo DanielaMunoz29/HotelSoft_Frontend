@@ -76,7 +76,7 @@ export interface GoogleLoginPayload {
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly API_BASE_URL = 'http://localhost:8080';
+  private readonly API_BASE_URL = 'https://hotelsoft-backend.onrender.com';
   private readonly TOKEN_KEY = 'auth_token';
   private readonly USER_KEY = 'user_data';
 
