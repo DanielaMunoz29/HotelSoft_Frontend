@@ -3,10 +3,11 @@
     <div class="d-flex justify-content-center">
         <div class="card mb-3" style="width: 50em;">
             <div class="row g-0">
-                <div class="col-md-4">
-                    <img src="..." class="img-fluid rounded-start" alt="...">
+                <div class="col-md-5">
+                    <img src="https://res.cloudinary.com/dvkvps1fy/image/upload/v1760982651/HotelSoftLogin_ek9stj.png"
+                        class="img-fluid rounded-start h-100 w-100 object-fit-cover" alt="..." style="opacity: .7;">
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-7">
                     <div class="card-body p-4">
                         <div class="mb-3">
                             <span class="text-secondary">#{{ user.id }}</span>
@@ -23,8 +24,8 @@
                                 <label for="name" class="form-label">Nombre</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="email" class="form-control" id="email" name="email" placeholder="Correo Electrónico"
-                                    [(ngModel)]="user.email" required email>
+                                <input type="email" class="form-control" id="email" name="email"
+                                    placeholder="Correo Electrónico" [(ngModel)]="user.email" required email>
                                 <label for="email" class="form-label">Correo Electrónico</label>
                             </div>
                             <div class="form-floating mb-4">
