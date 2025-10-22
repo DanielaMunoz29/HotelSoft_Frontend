@@ -153,7 +153,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="bookingModalLabel">Reserva</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="bookingForm.resetForm()"></button>
       </div>
       <div class="modal-body p-5">
         <form #bookingForm="ngForm" novalidate>
@@ -211,7 +211,7 @@
           <!-- Fecha de entrada -->
           <div class="form-floating mb-3">
             <input type="date" class="form-control" id="fechaEntrada" name="fechaEntrada" placeholder="Fecha de Entrada"
-              [min]="getCurrentDate() | date:'yyyy-MM-dd'"
+              [min]="getCurrentDate() | date:'yyyy-MM-dd'" (ngModelChange)="onDatesChange()"
               [max]="booking.fechaSalida ? (booking.fechaSalida | date:'yyyy-MM-dd') : null"
               [(ngModel)]="booking.fechaEntrada" required #fechaEntrada="ngModel"
               [ngClass]="bookingFormSubmitted && fechaEntrada.invalid ? 'is-invalid' : '' " />
@@ -227,7 +227,7 @@
           <div class="form-floating mb-3">
             <input type="date" class="form-control" id="fechaSalida" name="fechaSalida" placeholder="Fecha de Salida"
               [min]="booking.fechaEntrada ? (booking.fechaEntrada | date:'yyyy-MM-dd') : getCurrentDate() | date:'yyyy-MM-dd'"
-              [(ngModel)]="booking.fechaSalida" required #fechaSalida="ngModel"
+              [(ngModel)]="booking.fechaSalida" required #fechaSalida="ngModel" (ngModelChange)="onDatesChange()"
               [ngClass]="bookingFormSubmitted && fechaSalida.invalid ? 'is-invalid' : '' " />
             <label for="fechaSalida">Fecha de Salida</label>
             @if (bookingFormSubmitted && fechaSalida.invalid) {
@@ -247,7 +247,7 @@
           <div class="mt-5">
             <div class="list-group">
               <a role="button" class="list-group-item list-group-item-action list-group-item-info"
-                [ngClass]="paymentMethod === 'pointsCash' ? 'active' : ''" (click)="paymentMethod = 'pointsCash'">
+                [ngClass]="paymentMethod === 'pointsCash' ? 'active' : ''">
                 <div class="d-flex align-items-center gap-3">
                   <input class="form-check-input me-1" type="radio" name="paymentMethodRadio" value="pointsCash"
                     id="pointsCash" [(ngModel)]="paymentMethod">
@@ -255,16 +255,16 @@
                     <h5>Puntos + Dinero</h5>
                     <div class="input-group mb-3">
                       <input type="text" class="form-control" aria-label="points" placeholder="Points"
-                        [value]="currentUser.puntos" [(ngModel)]="booking.puntos" name="pointsToUse" readonly>
+                        [value]="currentUser.puntos" [(ngModel)]="booking.puntos" name="pointsToUse" (ngModelChange)="onPointsChange()">
                       <span class="input-group-text">+</span>
                       <input type="text" class="form-control" placeholder="Server" aria-label="Server"
-                        [value]="calculateBookingTotal() | currency:'COP':'symbol-narrow':'1.0'" readonly>
+                        [value]="totalDiscount | currency:'COP':'symbol-narrow':'1.0'" readonly>
                     </div>
                   </div>
                 </div>
               </a>
               <a role="button" class="list-group-item list-group-item-action list-group-item-info"
-                [ngClass]="paymentMethod === 'cash' ? 'active' : ''" (click)="paymentMethod = 'cash'">
+                [ngClass]="paymentMethod === 'cash' ? 'active' : ''">
                 <div class="d-flex align-items-center gap-3">
                   <input class="form-check-input me-1" type="radio" name="paymentMethodRadio" value="cash" id="cash"
                     [(ngModel)]="paymentMethod">
@@ -283,7 +283,7 @@
         <!-- <p class="mt-5 fw-bold">Total: {{ calculateBookingTotal() | currency:'COP':'symbol':'1.0' }}</p> -->
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="bookingForm.resetForm()">Cancelar</button>
         <button type="button" class="btn btn-primary" (click)="createBooking(bookingForm)">Reservar</button>
       </div>
     </div>

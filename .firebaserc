@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "hotesoft-3a4b3",
+    "prod": "hotelsoft-3a4b3"
+  },
+  "targets": {},
+  "etags": {}
+}

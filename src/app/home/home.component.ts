@@ -24,6 +24,10 @@ export class HomeComponent {
 
   bookingRoom: Room | null = null;
 
+  usePoints: boolean = false;
+
+  totalDiscount: number = 0;
+
   booking: Booking = {
     idReserva: 0,
     idUsuario: 0,
@@ -163,6 +167,27 @@ export class HomeComponent {
     }
   }
 
+  onDatesChange() {
+    if (!this.booking.fechaEntrada || !this.booking.fechaSalida) {
+      return;
+    }
+    // esto dispara el cálculo
+    const total = this.calculateBookingTotal();
+    const userPoints = this.booking.puntos || 0;
+    this.totalDiscount = total - (userPoints * 1000);
+  }
+
+  onPointsChange() {
+    // esto dispara el cálculo
+    const total = this.calculateBookingTotal();
+    const userPoints = this.booking.puntos || 0;
+    this.totalDiscount = total - (userPoints * 1000);
+  }
+
+  calculatePointsDiscount() {
+
+  }
+
   calculateBookingTotal(): number {
 
     // Calcular la diferencia en días entre las fechas de entrada y salida
@@ -201,7 +226,9 @@ export class HomeComponent {
       fechaSalida: new Date(this.booking.fechaSalida).toISOString().slice(0, 19)
     };
 
-    this.bookingService.createBooking(payload).subscribe({
+    this.usePoints = this.paymentMethod === 'pointsCash';
+
+    this.bookingService.createBooking(payload, this.usePoints).subscribe({
       next: (data) => {
         Swal.fire('Reserva creada', 'La reserva se ha creado correctamente.', 'success');
         this.bookingFormSubmitted = false;
@@ -209,14 +236,13 @@ export class HomeComponent {
 
         // Cerrar el modal manualmente
         const modalElement = document.getElementById('bookingModal');
-        console.log(modalElement);
         if (modalElement) {
-          const modal = new bootstrap.Modal(modalElement);
+          const modal = bootstrap.Modal.getInstance(modalElement);
           modal.hide();
         }
       },
       error: (error) => {
-        const errorMessage = error.error?.error || 'Hubo un error al crear la reserva.';
+        const errorMessage = error.error?.message || 'Hubo un error al crear la reserva.';
         Swal.fire('Error', errorMessage, 'error');
       }
     });

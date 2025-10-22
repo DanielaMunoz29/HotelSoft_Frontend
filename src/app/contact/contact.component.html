@@ -1,13 +1,15 @@
 <div class="contact-container">
     <h2 class="text-white text-center mb-5">Contacto</h2>
     <div class="bg-white p-4 rounded-3 shadow-sm mb-5">
-        <p class="mb-4">Si tienes alguna pregunta o comentario, no dudes en contactarnos. Estaremos encantados de ayudarte.</p>
-        <form #contactForm="ngForm">
+        <p class="mb-4">Si tienes alguna pregunta o comentario, no dudes en contactarnos. Estaremos encantados de
+            ayudarte.</p>
+        <form #contactForm="ngForm" (ngSubmit)="submitContactForm(contactForm)" novalidate>
             <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="name" name="name" placeholder="Nombre"
-                    [(ngModel)]="contact.name" #name="ngModel" required>
+                    [(ngModel)]="contact.nombre" #name="ngModel" required [ngClass]="submitted && name.invalid
+                  ? 'is-invalid' : '' ">
                 <label for="name" class="form-label">Nombre</label>
-                @if (contactForm.submitted && name.invalid) {
+                @if (submitted && name.invalid) {
                 <div class="invalid-feedback">
                     El nombre es obligatorio.
                 </div>
@@ -15,25 +17,43 @@
             </div>
             <div class="form-floating mb-3">
                 <input type="email" class="form-control" id="email" name="email" placeholder="Correo Electrónico"
-                    [(ngModel)]="contact.email" #email="ngModel" required email>
+                    [(ngModel)]="contact.correo" #email="ngModel" required email [ngClass]="submitted && email.invalid
+                  ? 'is-invalid' : '' ">
                 <label for="email" class="form-label">Correo Electrónico</label>
-                @if (contactForm.submitted && email.invalid) {
-                    @if (email.errors?.['required']) {
-                    <div class="invalid-feedback">
-                        El correo electrónico es obligatorio.
-                    </div>
-                    }
-                    @if (email.errors?.['email']) {
-                    <div class="invalid-feedback">
-                        Por favor, ingrese un correo electrónico válido.
-                    </div>
-                    }
+                @if (submitted && email.invalid) {
+                @if (email.errors?.['required']) {
+                <div class="invalid-feedback">
+                    El correo electrónico es obligatorio.
+                </div>
+                }
+                @if (email.errors?.['email']) {
+                <div class="invalid-feedback">
+                    Por favor, ingrese un correo electrónico válido.
+                </div>
+                }
+                }
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="subject" name="subject" placeholder="Asunto"
+                    [(ngModel)]="contact.asunto" #subject="ngModel" required [ngClass]="submitted && subject.invalid
+                  ? 'is-invalid' : '' ">
+                <label for="subject" class="form-label">Asunto</label>
+                @if (submitted && subject.invalid) {
+                <div class="invalid-feedback">
+                    El asunto es obligatorio.
+                </div>
                 }
             </div>
             <div class="form-floating mb-3">
                 <textarea class="form-control" id="message" name="message" placeholder="Mensaje"
-                    [(ngModel)]="contact.message" style="height: 150px" maxlength="200" required></textarea>
+                    [(ngModel)]="contact.mensaje" style="height: 150px" maxlength="200" required [ngClass]="submitted && message.invalid
+                  ? 'is-invalid' : '' " #message="ngModel"></textarea>
                 <label for="message" class="form-label">Mensaje</label>
+                @if (submitted && message.invalid) {
+                <div class="invalid-feedback">
+                    El mensaje es obligatorio.
+                </div>
+                }
             </div>
             <div class="d-flex justify-content-end">
                 <button type="submit" class="btn btn-primary">Enviar</button>

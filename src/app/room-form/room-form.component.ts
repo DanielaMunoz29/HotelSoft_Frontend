@@ -200,10 +200,6 @@ export class RoomFormComponent {
   onSubmit(form: NgForm) {
     this.submitted = true;
 
-    console.log(this.room);
-
-    console.log(this.selectedImages);
-
     if (!this.selectedImages.length) {
       Swal.fire({
         icon: 'warning',

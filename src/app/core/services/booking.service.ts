@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Booking } from '../models/booking';
 import { BookingResponse } from '../models/booking-response';
@@ -25,8 +25,9 @@ export class BookingService {
     return this.http.get<any>(`${this.apiUrl}/user/${idUsuario}`);
   }
 
-  createBooking(bookingData: Booking) {
-    return this.http.post(`${this.apiUrl}`, bookingData);
+  createBooking(bookingData: Booking, usePoints: boolean) {
+    const params = new HttpParams().set('puntos', usePoints);
+    return this.http.post(`${this.apiUrl}/crear`, bookingData, { params });
   }
 
   updateBooking(id: number, bookingData: Booking) {
