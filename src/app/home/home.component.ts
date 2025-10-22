@@ -112,10 +112,10 @@ export class HomeComponent {
       case 'doble':
         multiplier = 2;
         break;
-      case 'suite':
+      case 'familiar':
         multiplier = 3;
         break;
-      case 'familiar':
+      case 'suite':
         multiplier = 4;
         break;
       default:
