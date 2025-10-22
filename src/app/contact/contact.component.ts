@@ -4,6 +4,8 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { AuthService } from '../core/services/auth.service';
 import { ContactService } from '../core/services/contact.service';
 import Swal from 'sweetalert2';
+import emailjs from 'emailjs-com';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-contact',
@@ -55,17 +57,24 @@ export class ContactComponent {
     if (form.invalid) {
       return;
     }
+    const serviceID = 'service_9zmqv76';
+    const templateID = 'template_9vzr5l6';
+    const publicKey = 'SuZZeSqZDMkMI2-1t';
 
-    // Aquí puedes manejar el envío del formulario de contacto
-    this.contactService.sendEmail(this.contact).subscribe({
-      next: () => {
+    const templateParams = {
+      name: this.contact.nombre,
+      subject: this.contact.asunto,
+      email: this.contact.correo,
+      message: this.contact.mensaje
+    };
+
+    emailjs.send(serviceID, templateID, templateParams, publicKey)
+      .then(() => {
         Swal.fire('Éxito', 'Tu mensaje ha sido enviado. Nos pondremos en contacto contigo pronto.', 'success');
-        this.resetContactForm();
-      },
-      error: (error) => {
-        const errorMessage = error.error?.error || 'Hubo un error al enviar tu mensaje. Por favor, intenta de nuevo más tarde.';
-        Swal.fire('Error', errorMessage, 'error');
-      }
-    });
+        this.resetContactForm(); 
+      })
+      .catch((error) => {
+        Swal.fire('Error', 'Ocurrió un error al enviar el correo ❌', 'error');
+      });
   }
 }
