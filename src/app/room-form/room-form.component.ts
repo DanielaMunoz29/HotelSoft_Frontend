@@ -8,12 +8,21 @@ import { RoomService } from '../core/services/room.service';
 import Swal from 'sweetalert2';
 import { AMENITIES_LIST } from '../core/constants/amenities';
 
+
+async function urlToFile(url: string, filename: string): Promise<File> {
+  const response = await fetch(url, { mode: 'cors' });
+  const blob = await response.blob();
+  const extension = url.split('.').pop() || 'jpg';
+  return new File([blob], `${filename}.${extension}`, { type: blob.type });
+}
+
 @Component({
   selector: 'app-room-form',
   imports: [CommonModule, FormsModule],
   templateUrl: './room-form.component.html',
   styleUrls: ['./room-form.component.css']
 })
+
 export class RoomFormComponent {
   room: Room = {
     idHabitacion: 0,
@@ -72,17 +81,29 @@ export class RoomFormComponent {
     this.roomService.getRoomById(Number(id)).subscribe({
       next: (data) => {
         this.room = data;
+        this.loadSelectedImages();
       }
     });
-
-    this.loadSelectedImages();
   }
 
-  loadSelectedImages() {
-    this.selectedImages = this.room.imagenes.map(url => ({
-      file: new File([], ''), // Archivo vacío, solo para mantener la estructura
-      url
-    }));
+  async loadSelectedImages() {
+    // this.selectedImages = this.room.imagenes.map(url => ({
+    //   file: null as any,
+    //   url: url,
+    //   isNew: false
+    // }));
+
+    this.selectedImages = [];
+
+    for (let i = 0; i < this.room.imagenes.length; i++) {
+      const url = this.room.imagenes[i];
+      const file = await urlToFile(url, `imagen_${i + 1}`);
+
+      this.selectedImages.push({
+        file,
+        url
+      });
+    }
   }
 
   // Agregar o quitar una comodidad
@@ -132,7 +153,7 @@ export class RoomFormComponent {
       if (file.type.startsWith('image/')) {
         const reader = new FileReader();
         reader.onload = () => {
-          this.selectedImages.push({ file, url: reader.result as string });
+          this.selectedImages.push({ file, url: reader.result as string});
         };
         reader.readAsDataURL(file);
       }
@@ -179,6 +200,10 @@ export class RoomFormComponent {
   onSubmit(form: NgForm) {
     this.submitted = true;
 
+    console.log(this.room);
+
+    console.log(this.selectedImages);
+
     if (!this.selectedImages.length) {
       Swal.fire({
         icon: 'warning',
@@ -201,7 +226,18 @@ export class RoomFormComponent {
       return;
     }
 
-    this.roomService.createRoom(this.room, this.selectedImages.map(img => img.file)).subscribe({
+    if (this.isEditMode) {
+      this.updateRoom();
+    } else {
+      this.createRoom();
+    }
+
+  }
+
+
+  createRoom() {
+    const imagesToUpload = this.selectedImages.map(img => img.file);
+    this.roomService.createRoom(this.room, imagesToUpload).subscribe({
       next: (data) => {
         Swal.fire({
           icon: 'success',
@@ -211,7 +247,27 @@ export class RoomFormComponent {
         this.router.navigate(['/room-list']);
       },
       error: (error) => {
-        const errorMessage = error.error?.message || 'Hubo un error al crear la habitación.';
+        const errorMessage = error.error?.error || 'Hubo un error al crear la habitación.';
+        this.submitted = false;
+        Swal.fire('Error', errorMessage, 'error');
+      }
+    });
+  }
+
+  updateRoom() {
+    const imagesToUpload = this.selectedImages.map(img => img.file);
+    this.roomService.updateRoom(this.room, imagesToUpload).subscribe({
+      next: (data) => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Habitación actualizada',
+          text: `La habitación ${data.nombreHabitacion} ha sido actualizada exitosamente.`,
+        });
+        this.router.navigate(['/room-list']);
+      },
+      error: (error) => {
+        const errorMessage = error.error?.error || 'Hubo un error al actualizar la habitación.';
+        this.submitted = false;
         Swal.fire('Error', errorMessage, 'error');
       }
     });

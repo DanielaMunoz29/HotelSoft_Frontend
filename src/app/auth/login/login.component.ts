@@ -324,7 +324,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       timer: 1200,
       showConfirmButton: false
     }).then(() => {
-      this.router.navigate(['/home']);
+      window.location.href = this.currentOrigin + '/home';
     });
   }
 
@@ -404,7 +404,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       timer: 1200,
       showConfirmButton: false
     }).then(() => {
-      this.router.navigate(['/home']);
+      window.location.href = this.currentOrigin + '/home';
     });
   }
 

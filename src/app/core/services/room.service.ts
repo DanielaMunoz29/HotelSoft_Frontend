@@ -60,8 +60,22 @@ export class RoomService {
     return this.http.post<Room>(this.apiUrl, formData);
   }
 
-  updateRoom(id: number, room: Room): Observable<Room> {
-    return this.http.put<Room>(`${this.apiUrl}/${id}`, room);
+  updateRoom(room: Room, imagenes: File[]): Observable<Room> {
+
+    const formData = new FormData();
+
+    // Convertir el objeto room a JSON y agregarlo como Blob
+    formData.append(
+      'habitacion',
+      new Blob([JSON.stringify(room)], { type: 'application/json' })
+    );
+
+    // Agregar las imágenes (si hay)
+    if (imagenes && imagenes.length > 0) {
+      imagenes.forEach(img => formData.append('imagenes', img));
+    }
+
+    return this.http.put<Room>(`${this.apiUrl}/${room.numeroHabitacion}`, formData);
   }
 
   updateRoomStatus(numeroHabitacion: string, newStatus: string): Observable<Room> {

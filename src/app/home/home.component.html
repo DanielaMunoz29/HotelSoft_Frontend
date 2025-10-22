@@ -237,6 +237,12 @@
             }
           </div>
 
+          @if (booking.fechaEntrada && booking.fechaSalida) {
+          <div class="mb-3">
+            <span>Sumas +{{ calculateObtainablePoints() }} puntos con esta reserva</span>
+          </div>
+          }
+
           <!-- Método de pago -->
           <div class="mt-5">
             <div class="list-group">
@@ -246,7 +252,7 @@
                   <input class="form-check-input me-1" type="radio" name="paymentMethodRadio" value="pointsCash"
                     id="pointsCash" [(ngModel)]="paymentMethod">
                   <div>
-                    <h5>Puntos + Plata</h5>
+                    <h5>Puntos + Dinero</h5>
                     <div class="input-group mb-3">
                       <input type="text" class="form-control" aria-label="points" placeholder="Points"
                         [value]="currentUser.puntos" [(ngModel)]="booking.puntos" name="pointsToUse" readonly>
@@ -262,9 +268,12 @@
                 <div class="d-flex align-items-center gap-3">
                   <input class="form-check-input me-1" type="radio" name="paymentMethodRadio" value="cash" id="cash"
                     [(ngModel)]="paymentMethod">
-                  <label for="cash" class="form-check-label fw-bold">Total: {{ calculateBookingTotal() |
-                    currency:'COP':'symbol':'1.0'
-                    }}</label>
+                  <div>
+                    <h5>Solo dinero</h5>
+                    <label for="cash" class="form-check-label fw-bold">{{ calculateBookingTotal() |
+                      currency:'COP':'symbol':'1.0'
+                      }}</label>
+                  </div>
                 </div>
               </a>
             </div>

@@ -13,6 +13,11 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.room-form-disabled {
+  pointer-events: none;
+  opacity: 0.5; /* opcional, para mostrarlo visualmente deshabilitado */
+}
+
 .room-image {
     width: 150px;
     height: 150px;

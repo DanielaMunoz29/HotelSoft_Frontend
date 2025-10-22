@@ -41,7 +41,7 @@ export class ContactComponent {
           Swal.fire('Éxito', 'Tu mensaje ha sido enviado. Nos pondremos en contacto contigo pronto.', 'success');
         },
         error: (error) => {
-          const errorMessage = error.error?.message || 'Hubo un error al enviar tu mensaje. Por favor, intenta de nuevo más tarde.';
+          const errorMessage = error.error?.error || 'Hubo un error al enviar tu mensaje. Por favor, intenta de nuevo más tarde.';
           Swal.fire('Error', errorMessage, 'error');
         }
       });

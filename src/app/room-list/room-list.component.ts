@@ -3,15 +3,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { RoomService } from '../core/services/room.service';
 import { Room } from '../core/models/room.model';
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs/internal/Observable';
+import { Router, RouterLink } from '@angular/router';
 import { AMENITIES_LIST } from '../core/constants/amenities';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-room-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './room-list.component.html',
   styleUrl: './room-list.component.css'
 })

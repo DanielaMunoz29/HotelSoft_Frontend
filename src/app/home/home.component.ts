@@ -21,6 +21,9 @@ declare var bootstrap: any;
 export class HomeComponent {
   rooms: Room[] = [];
   carouselRooms: Room[] = [];
+
+  bookingRoom: Room | null = null;
+
   booking: Booking = {
     idReserva: 0,
     idUsuario: 0,
@@ -78,6 +81,46 @@ export class HomeComponent {
     });
   }
 
+  calculateObtainablePoints(): number {
+    // Calcular la diferencia en días entre las fechas de entrada y salida
+    if (!this.booking.fechaEntrada || !this.booking.fechaSalida) {
+      return 0;
+    }
+
+    const checkIn = new Date(this.booking.fechaEntrada);
+    const checkOut = new Date(this.booking.fechaSalida);
+    const timeDiff = checkOut.getTime() - checkIn.getTime();
+    const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    if (isNaN(daysDiff) || daysDiff <= 0) {
+      return 0;
+    }
+
+    // Obtener el tipo de habitación (preferir bookingRoom si está disponible)
+    const room = this.bookingRoom ?? this.rooms.find(r => r.idHabitacion === this.booking.idHabitacion);
+    const type = room?.tipoHabitacion?.toString().toLowerCase() ?? '';
+
+    // Multiplicador según tipo: sencilla=1, doble=2, suite=3, familiar=4
+    let multiplier = 1;
+    switch (type) {
+      case 'sencilla':
+        multiplier = 1;
+        break;
+      case 'doble':
+        multiplier = 2;
+        break;
+      case 'suite':
+        multiplier = 3;
+        break;
+      case 'familiar':
+        multiplier = 4;
+        break;
+      default:
+        multiplier = 1;
+    }
+
+    return daysDiff * multiplier;
+  }
+
   getCurrentDate(): string {
     const today = new Date();
     const year = today.getFullYear();
@@ -101,6 +144,8 @@ export class HomeComponent {
   // Abrir modal de reserva
   openBookingModal(room: Room) {
 
+    this.bookingRoom = room;
+
     // Verificar si el usuario está autenticado
     if (!this.authService.isAuthenticated()) {
       this.router.navigate(['/login']);
@@ -119,10 +164,20 @@ export class HomeComponent {
   }
 
   calculateBookingTotal(): number {
+
+    // Calcular la diferencia en días entre las fechas de entrada y salida
+    if (!this.booking.fechaEntrada || !this.booking.fechaSalida) {
+      return 0;
+    }
+
     const checkIn = new Date(this.booking.fechaEntrada);
     const checkOut = new Date(this.booking.fechaSalida);
     const timeDiff = checkOut.getTime() - checkIn.getTime();
     const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+    if (isNaN(daysDiff) || daysDiff <= 0) {
+      return 0;
+    }
 
     // Suponiendo que el precio por noche está en la habitación seleccionada
     const room = this.rooms.find(r => r.idHabitacion === this.booking.idHabitacion);
@@ -151,9 +206,17 @@ export class HomeComponent {
         Swal.fire('Reserva creada', 'La reserva se ha creado correctamente.', 'success');
         this.bookingFormSubmitted = false;
         form.resetForm();
+
+        // Cerrar el modal manualmente
+        const modalElement = document.getElementById('bookingModal');
+        console.log(modalElement);
+        if (modalElement) {
+          const modal = new bootstrap.Modal(modalElement);
+          modal.hide();
+        }
       },
       error: (error) => {
-        const errorMessage = error.error?.message || 'Hubo un error al crear la reserva.';
+        const errorMessage = error.error?.error || 'Hubo un error al crear la reserva.';
         Swal.fire('Error', errorMessage, 'error');
       }
     });

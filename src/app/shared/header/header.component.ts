@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { Subscription } from 'rxjs';
+import { UserService } from '../../core/services/user.service';
+import { User } from '../../core/models/user.model';
 
 @Component({
   selector: 'app-header',
@@ -13,7 +15,14 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  currentUser: any = null;
+  currentUser: User = {
+    id: 0,
+    cedula: '',
+    nombreCompleto: '',
+    email: '',
+    telefono: '',
+    puntos: 0
+  };
   isLoggedIn: boolean = false;
   isAdmin: boolean = false;
   
@@ -22,6 +31,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   constructor(
     public authService: AuthService,
+    private userService: UserService,
     private router: Router
   ) {}
 
@@ -50,7 +60,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private updateAuthState(): void {
     this.authService.updateAuthState();
     this.isLoggedIn = this.authService.isAuthenticated();
-    this.currentUser = this.authService.getCurrentUser();
+    this.userService.getUserByDocument(this.authService.getCurrentUser()?.cedula).subscribe({
+      next: (data: User) => {
+        this.currentUser = data;
+      }
+    });
   }
 
   getUserDisplayName(): string {
@@ -64,8 +78,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
       return nombres[0]; // Retorna solo el primer nombre
     }
     
-    if (this.currentUser.nombre) {
-      const nombres = this.currentUser.nombre.split(' ');
+    if (this.currentUser.nombreCompleto) {
+      const nombres = this.currentUser.nombreCompleto.split(' ');
       return nombres[0];
     }
     

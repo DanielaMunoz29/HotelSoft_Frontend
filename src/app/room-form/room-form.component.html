@@ -1,6 +1,6 @@
 <div class="room-form-background">
     <h2 class="text-center text-white mb-5">Habitación</h2>
-    <div class="room-form-container">
+    <div class="room-form-container" [ngClass]="submitted ? 'room-form-disabled' : ''">
         <form #roomForm="ngForm" (ngSubmit)="onSubmit(roomForm)" novalidate>
             @if (isEditMode) {
             <div class="mb-2">
@@ -59,8 +59,8 @@
 
             <!-- Precio habitacion -->
             <div class="form-floating mb-3">
-                <input id="roomPrice" name="roomPrice" type="text" class="form-control" placeholder="Precio" (input)="filterNumbers($event)"
-                    [(ngModel)]="room.precio" #roomPrice="ngModel" [ngClass]="submitted && roomPrice.invalid
+                <input id="roomPrice" name="roomPrice" type="text" class="form-control" placeholder="Precio"
+                    (input)="filterNumbers($event)" [(ngModel)]="room.precio" #roomPrice="ngModel" [ngClass]="submitted && roomPrice.invalid
                   ? 'is-invalid' : '' " />
                 <label for="roomPrice" class="form-label">Precio</label>
 
@@ -74,7 +74,8 @@
             <!-- Descripcion habitacion -->
             <div class="form-floating mb-4">
                 <textarea class="form-control" placeholder="Descripcion" id="roomDescription" name="roomDescription"
-                    style="height: 100px" maxlength="200" [(ngModel)]="room.descripcion" #roomDescription="ngModel"></textarea>
+                    style="height: 100px" maxlength="200" [(ngModel)]="room.descripcion"
+                    #roomDescription="ngModel"></textarea>
                 <label for="roomDescription">Descripcion</label>
             </div>
 
@@ -133,8 +134,14 @@
                     }
                 </div>
             </div>
-            <button class="btn" [ngClass]=" isEditMode ? 'btn-secondary' : 'btn-primary' " type="submit">{{isEditMode ?
-                'Guardar cambios' : 'Guardar' }}</button>
+            <button class="btn d-flex align-items-center" [ngClass]=" isEditMode ? 'btn-secondary' : 'btn-primary' " type="submit">{{isEditMode ?
+                'Guardar cambios' : 'Guardar' }}
+                 @if (submitted) {
+                <div class="spinner-border spinner-border-sm ms-2" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                }
+            </button>
         </form>
     </div>
 </div>

@@ -3,6 +3,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { User } from '../core/models/user.model';
 import { AuthService } from '../core/services/auth.service';
 import { UserService } from '../core/services/user.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-profile',
@@ -18,7 +19,7 @@ export class ProfileComponent {
     nombreCompleto: '',
     email: '',
     telefono: '',
-    contraseña: ''
+    contrasena: ''
   };
 
   constructor(
@@ -31,13 +32,26 @@ export class ProfileComponent {
   }
 
   loadUserProfile() {
-    const currentUserEmail = this.authService.getCurrentUser()?.email;
-    const currentUser = this.userService.getUserByEmail(currentUserEmail).subscribe({
+    const currentUserDocument = this.authService.getCurrentUser()?.cedula;
+    this.userService.getUserByDocument(currentUserDocument).subscribe({
       next: (data: any) => {
         this.user = data;
       },
       error: (error) => {
         console.error('Error loading user profile:', error);
+      }
+    });
+  }
+
+  updateProfile() {
+    this.userService.updateUserProfile(this.user).subscribe({
+      next: (data) => {
+        Swal.fire('Perfil actualizado', 'Tu perfil ha sido actualizado correctamente.', 'success');
+        this.loadUserProfile();
+      },
+      error: (error) => {
+        const errorMessage = error.error?.error || 'Hubo un error al actualizar tu perfil.';
+        Swal.fire('Error', errorMessage, 'error');
       }
     });
   }
