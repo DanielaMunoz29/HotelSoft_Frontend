@@ -11,10 +11,12 @@ import { roleGuard } from './core/guards/role.guard';
 import { ContactComponent } from './contact/contact.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ConditionsComponent } from './conditions/conditions.component';
+import { CleaningListComponent } from './cleaning-list/cleaning-list.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
+  { path: 'cleaning-list', component: CleaningListComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },

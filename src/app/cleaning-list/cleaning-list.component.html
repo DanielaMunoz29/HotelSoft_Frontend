@@ -1,0 +1,39 @@
+
+<div class="container mt-5">
+  <h2 class="text-center mb-4">Limpiezas Asignadas</h2>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="text-center">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p class="mt-2">Cargando limpiezas...</p>
+  </div>
+
+  <!-- Sin datos -->
+  <div *ngIf="!loading && limpiezas.length === 0" class="alert alert-warning text-center">
+    No hay limpiezas registradas para este usuario.
+  </div>
+
+  <!-- Tabla de limpiezas -->
+  <div *ngIf="!loading && limpiezas.length > 0" class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead class="table-primary text-center">
+        <tr>
+          <th>ID</th>
+          <th>Habitación</th>
+          <th>Tipo de Aseo</th>
+          <th>Descripción</th>
+          <th>Fecha</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let limpieza of limpiezas" class="text-center">
+          <td>{{ limpieza.id }}</td>
+          <td>{{ limpieza.habitacionNombre }}</td>
+          <td>{{ limpieza.tipoAseo }}</td>
+          <td>{{ limpieza.descripcion }}</td>
+          <td>{{ limpieza.fechaRegistro | date:'medium' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

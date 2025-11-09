@@ -9,6 +9,8 @@ import { Booking } from '../core/models/booking';
 import Swal from 'sweetalert2';
 import { AuthService } from '../core/services/auth.service';
 import { Router } from '@angular/router';
+import { UserService } from '../core/services/user.service';
+import { UserDTO } from '../core/models/user.model';
 
 declare var bootstrap: any;
 
@@ -47,6 +49,9 @@ export class HomeComponent {
   bookingFormSubmitted = false;
 
   currentUser: { puntos: number } = { puntos: 0 };
+  ///
+  email!:string;
+  userInfo!:UserDTO;
 
   roomSearchParams: {
     type: string,
@@ -62,11 +67,26 @@ export class HomeComponent {
     private roomService: RoomService,
     private bookingService: BookingService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private userService:UserService
   ) { }
 
   ngOnInit(): void {
     this.loadRooms();
+    var emailUser = this.authService.getEmailFromToken();
+    this.email = emailUser ?? '';
+     // Llamar al servicio y suscribirse al resultado
+      this.userService.getUserByEmailDto(this.email).subscribe({
+        next: (data: UserDTO) => {
+          this.userInfo = data;
+          //console.log(data);
+        },
+        error: (err) => {
+          console.error('Error obteniendo usuario:', err);
+        }
+      });
+     
+
   }
 
   // Cargar habitaciones
@@ -155,9 +175,21 @@ export class HomeComponent {
       this.router.navigate(['/login']);
       return;
     }
+     // Copiar la información del usuario autenticado al objeto de reserva
+    if (this.userInfo) {
+      this.booking.idUsuario = this.userInfo.id;
+      this.booking.nombreTitular = this.userInfo.nombreCompleto;
+      this.booking.email = this.userInfo.email;
+      this.booking.telefono = this.userInfo.telefono;
+      this.booking.puntos = this.userInfo.puntos || 0;
+    }
+
+    // console.log('Prueba: '+this.userInfo.telefono)
+
 
     this.booking.idUsuario = this.authService.getStoredUserData()?.idUsuario || 0;
     this.booking.idHabitacion = room.idHabitacion;
+    //(this.booking as any).precioHabitacion = room.precio; //  agrega este campo temporalmente
 
     // Abrir el modal manualmente
     const modalElement = document.getElementById('bookingModal');

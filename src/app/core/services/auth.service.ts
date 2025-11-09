@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { tap, catchError } from 'rxjs/operators';
+import { tap, catchError, buffer } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 /**
@@ -462,4 +462,62 @@ export class AuthService {
     this.isAuthenticatedSubject.next(true);
     this.startInactivityMonitoring();
   }
+
+  ///
+
+    /**
+   * Decodifica el payload de un JWT (soporta base64url).
+   * Retorna el objeto payload o null si falla.
+   */
+  private decodeToken(token: string | null): any | null {
+    if (!token) return null;
+    try {
+      const parts = token.split('.');
+      if (parts.length < 2) return null;
+      // payload en base64url -> convertir a base64 estándar
+      const base64Url = parts[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      // atob decodifica base64 en el navegador; para manejar UTF-8 correctamente:
+      const jsonPayload = decodeURIComponent(
+        Array.from(atob(base64))
+          .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+          .join('')
+      );
+      return JSON.parse(jsonPayload);
+    } catch (e) {
+      console.error('decodeToken error:', e);
+      return null;
+    }
+  }
+
+  /**
+   * Devuelve una claim concreta del token (o null si no existe).
+   */
+  getClaimFromToken(claim: string): any | null {
+    const token = this.getToken();
+    const payload = this.decodeToken(token);
+    return payload ? (payload[claim] ?? null) : null;
+  }
+
+  /**
+   * Atajo para obtener el email desde el token (busca email, sub o correo).
+   */
+  getEmailFromToken(): string | null {
+    const token = this.getToken();
+    const payload = this.decodeToken(token);
+    if (!payload) return null;
+    return payload.email ?? payload.sub ?? payload.correo ?? null;
+  }
+
+  /**
+   * Atajo para obtener un id de usuario desde el token (sub, id, userId...).
+   */
+  getUserIdFromToken(): string | number | null {
+    const token = this.getToken();
+    const payload = this.decodeToken(token);
+    if (!payload) return null;
+    return payload.sub ?? payload.id ?? payload.userId ?? null;
+  }
+
+
 }

@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { User } from '../models/user.model';
+import { User, UserDTO } from '../models/user.model';
 import { Observable } from 'rxjs';
+import { LimpiezaDto } from '../models/LimpiezaDto';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,12 @@ export class UserService {
     private http: HttpClient
   ) { }
 
+
+    // Obtener limpiezas por usuario
+  getLimpiezasByUser(userId: number): Observable<LimpiezaDto[]> {
+    return this.http.get<LimpiezaDto[]>(`${this.apiUrl}/listarLimpiezaByusuario/${userId}`);
+  }
+
   getUserByDocument(cedula: string): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/cedula/${cedula}`);
   }
@@ -24,5 +31,9 @@ export class UserService {
 
   updateUserProfile(user: User) {
     return this.http.put(`${this.apiUrl}/cedula/${user.cedula}`, user);
+  }
+
+  getUserByEmailDto(email: string): Observable<UserDTO> {
+    return this.http.get<UserDTO>(`${this.apiUrl}/email/${email}`);
   }
 }

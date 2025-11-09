@@ -10,3 +10,15 @@ export interface User {
   enabled?: boolean;
   puntos?: number;
 }
+
+export interface UserDTO {
+  id: number;
+  email: string;
+  nombreCompleto: string;
+  cedula: string;
+  telefono: string;
+  role: string;
+  enabled: boolean;
+  puntos:number;
+}
+

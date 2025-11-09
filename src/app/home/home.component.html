@@ -151,100 +151,111 @@
   aria-labelledby="bookingModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
+
+      <!-- Encabezado -->
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="bookingModalLabel">Reserva</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="bookingForm.resetForm()"></button>
+        <h1 class="modal-title fs-5" id="bookingModalLabel">
+          Reserva de {{ bookingRoom?.nombreHabitacion }}
+        </h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+          (click)="bookingForm.resetForm()"></button>
       </div>
+
+      <!-- Cuerpo -->
       <div class="modal-body p-5">
         <form #bookingForm="ngForm" novalidate>
-          <!-- Datos del Titular -->
 
-          <!-- Nombre del Titular -->
+          <!-- Información de la habitación -->
+          <div class="mb-4 text-center border rounded p-3 bg-light">
+            <h5 class="mb-1">{{ bookingRoom?.nombreHabitacion }}</h5>
+            <p class="text-muted mb-1">{{ bookingRoom?.tipoHabitacion }}</p>
+            <h4 class="text-primary fw-bold mb-0">
+              {{ bookingRoom?.precio | currency:'COP':'symbol':'1.0' }} / noche
+            </h4>
+          </div>
+
+          <!-- Datos del Titular -->
           <div class="form-floating mb-3">
             <input type="text" class="form-control" id="nombreTitular" name="nombreTitular"
               placeholder="Nombre del Titular" [(ngModel)]="booking.nombreTitular" required #nombreTitular="ngModel"
-              [ngClass]="bookingFormSubmitted && nombreTitular.invalid ? 'is-invalid' : '' " />
+              [ngClass]="bookingFormSubmitted && nombreTitular.invalid ? 'is-invalid' : ''" />
             <label for="nombreTitular">Nombre del Titular</label>
-
             @if (bookingFormSubmitted && nombreTitular.invalid) {
-            <div class="invalid-feedback">
-              El nombre del titular es obligatorio.
-            </div>
+              <div class="invalid-feedback">El nombre del titular es obligatorio.</div>
             }
           </div>
 
-          <!-- Email del Titular -->
           <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="email" name="email" placeholder="Email"
-              [(ngModel)]="booking.email" required email #email="ngModel"
-              [ngClass]="bookingFormSubmitted && email.invalid ? 'is-invalid' : '' " />
+            <input type="email" class="form-control" id="email" name="email" placeholder="Email"
+              [(ngModel)]="booking.email" required #email="ngModel"
+              [ngClass]="bookingFormSubmitted && email.invalid ? 'is-invalid' : ''" />
             <label for="email">Email</label>
-
             @if (bookingFormSubmitted && email.invalid) {
-            <div class="invalid-feedback">
-              El email del titular es obligatorio.
-            </div>
+              <div class="invalid-feedback">El email del titular es obligatorio.</div>
             }
           </div>
 
-          <!-- Teléfono del Titular -->
           <div class="form-floating mb-3">
             <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Teléfono"
               [(ngModel)]="booking.telefono" required pattern="^[0-9]+$" #telefono="ngModel"
-              [ngClass]="bookingFormSubmitted && telefono.invalid ? 'is-invalid' : '' " />
+              [ngClass]="bookingFormSubmitted && telefono.invalid ? 'is-invalid' : ''" />
             <label for="telefono">Teléfono</label>
-
             @if (bookingFormSubmitted && telefono.invalid) {
-            @if (telefono.errors?.['required']) {
-            <div class="invalid-feedback">
-              El teléfono del titular es obligatorio.
-            </div>
-            }
-            @if (telefono.errors?.['pattern']) {
-            <div class="invalid-feedback">
-              El teléfono del titular debe ser un número válido.
-            </div>
-            }
+              @if (telefono.errors?.['required']) {
+                <div class="invalid-feedback">El teléfono del titular es obligatorio.</div>
+              }
+              @if (telefono.errors?.['pattern']) {
+                <div class="invalid-feedback">El teléfono debe ser un número válido.</div>
+              }
             }
           </div>
 
-          <!-- Fecha de entrada -->
+          <!-- Fechas -->
           <div class="form-floating mb-3">
-            <input type="date" class="form-control" id="fechaEntrada" name="fechaEntrada" placeholder="Fecha de Entrada"
+            <input type="date" class="form-control" id="fechaEntrada" name="fechaEntrada"
               [min]="getCurrentDate() | date:'yyyy-MM-dd'" (ngModelChange)="onDatesChange()"
               [max]="booking.fechaSalida ? (booking.fechaSalida | date:'yyyy-MM-dd') : null"
               [(ngModel)]="booking.fechaEntrada" required #fechaEntrada="ngModel"
-              [ngClass]="bookingFormSubmitted && fechaEntrada.invalid ? 'is-invalid' : '' " />
+              [ngClass]="bookingFormSubmitted && fechaEntrada.invalid ? 'is-invalid' : ''" />
             <label for="fechaEntrada">Fecha de Entrada</label>
             @if (bookingFormSubmitted && fechaEntrada.invalid) {
-            <div class="invalid-feedback">
-              La fecha de entrada es obligatoria.
-            </div>
+              <div class="invalid-feedback">La fecha de entrada es obligatoria.</div>
             }
           </div>
 
-          <!-- Fecha de salida -->
           <div class="form-floating mb-3">
-            <input type="date" class="form-control" id="fechaSalida" name="fechaSalida" placeholder="Fecha de Salida"
+            <input type="date" class="form-control" id="fechaSalida" name="fechaSalida"
               [min]="booking.fechaEntrada ? (booking.fechaEntrada | date:'yyyy-MM-dd') : getCurrentDate() | date:'yyyy-MM-dd'"
               [(ngModel)]="booking.fechaSalida" required #fechaSalida="ngModel" (ngModelChange)="onDatesChange()"
-              [ngClass]="bookingFormSubmitted && fechaSalida.invalid ? 'is-invalid' : '' " />
+              [ngClass]="bookingFormSubmitted && fechaSalida.invalid ? 'is-invalid' : ''" />
             <label for="fechaSalida">Fecha de Salida</label>
             @if (bookingFormSubmitted && fechaSalida.invalid) {
-            <div class="invalid-feedback">
-              La fecha de salida es obligatoria.
-            </div>
+              <div class="invalid-feedback">La fecha de salida es obligatoria.</div>
             }
           </div>
 
+          <!-- Puntos obtenidos -->
           @if (booking.fechaEntrada && booking.fechaSalida) {
-          <div class="mb-3">
-            <span>Sumas +{{ calculateObtainablePoints() }} puntos con esta reserva</span>
-          </div>
+            <div class="mb-3 text-success">
+              <i class="bi bi-stars"></i> Ganas +{{ calculateObtainablePoints() }} puntos con esta reserva
+            </div>
           }
 
+          <!-- Puntos totales del usuario -->
+<div class="border-top pt-3 mt-3">
+  <div class="d-flex justify-content-between align-items-center">
+    <span class="fw-bold">
+      <i class="bi bi-stars text-warning"></i> Puntos totales del usuario:
+    </span>
+    <span class="fw-bold text-success">
+      {{ userInfo?.puntos || 0 }}
+    </span>
+  </div>
+</div>
+
+
           <!-- Método de pago -->
-          <div class="mt-5">
+          <div class="mt-4">
             <div class="list-group">
               <a role="button" class="list-group-item list-group-item-action list-group-item-info"
                 [ngClass]="paymentMethod === 'pointsCash' ? 'active' : ''">
@@ -252,38 +263,38 @@
                   <input class="form-check-input me-1" type="radio" name="paymentMethodRadio" value="pointsCash"
                     id="pointsCash" [(ngModel)]="paymentMethod">
                   <div>
-                    <h5>Puntos + Dinero</h5>
-                    <div class="input-group mb-3">
-                      <input type="text" class="form-control" aria-label="points" placeholder="Points"
-                        [value]="currentUser.puntos" [(ngModel)]="booking.puntos" name="pointsToUse" (ngModelChange)="onPointsChange()">
+                    <h6>Puntos + Dinero</h6>
+                    <div class="input-group mb-2">
+                      <input type="number" class="form-control" placeholder="Puntos a usar"
+                        [(ngModel)]="booking.puntos" name="pointsToUse" (ngModelChange)="onPointsChange()">
                       <span class="input-group-text">+</span>
-                      <input type="text" class="form-control" placeholder="Server" aria-label="Server"
+                      <input type="text" class="form-control"
                         [value]="totalDiscount | currency:'COP':'symbol-narrow':'1.0'" readonly>
                     </div>
                   </div>
                 </div>
               </a>
+
               <a role="button" class="list-group-item list-group-item-action list-group-item-info"
                 [ngClass]="paymentMethod === 'cash' ? 'active' : ''">
                 <div class="d-flex align-items-center gap-3">
                   <input class="form-check-input me-1" type="radio" name="paymentMethodRadio" value="cash" id="cash"
                     [(ngModel)]="paymentMethod">
                   <div>
-                    <h5>Solo dinero</h5>
-                    <label for="cash" class="form-check-label fw-bold">{{ calculateBookingTotal() |
-                      currency:'COP':'symbol':'1.0'
-                      }}</label>
+                    <h6>Solo Dinero</h6>
+                    <p class="mb-0 fw-bold">{{ calculateBookingTotal() | currency:'COP':'symbol':'1.0' }}</p>
                   </div>
                 </div>
               </a>
             </div>
           </div>
         </form>
-
-        <!-- <p class="mt-5 fw-bold">Total: {{ calculateBookingTotal() | currency:'COP':'symbol':'1.0' }}</p> -->
       </div>
+
+      <!-- Pie -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="bookingForm.resetForm()">Cancelar</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+          (click)="bookingForm.resetForm()">Cancelar</button>
         <button type="button" class="btn btn-primary" (click)="createBooking(bookingForm)">Reservar</button>
       </div>
     </div>

@@ -25,6 +25,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   };
   isLoggedIn: boolean = false;
   isAdmin: boolean = false;
+  isEmpleado: boolean=false;
   
   private authSubscription!: Subscription;
   private userSubscription!: Subscription;
@@ -45,6 +46,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.isLoggedIn = isAuthenticated;
         this.isAdmin = this.authService.getStoredUserData()?.role === 'ADMIN';
         console.log('Estado de autenticación cambiado:', isAuthenticated);
+        this.isEmpleado = this.authService.getStoredUserData()?.role === 'RECEPTION';
+
       }
     );
 
