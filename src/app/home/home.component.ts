@@ -244,39 +244,77 @@ export class HomeComponent {
   }
 
   // Crear reserva
-  createBooking(form: NgForm) {
-    this.bookingFormSubmitted = true;
+createBooking(form: NgForm) {
+  this.bookingFormSubmitted = true;
 
-    if (form.invalid) {
-      return;
-    }
-
-    // Prepare a payload with ISO strings for the backend while keeping this.booking as Date objects
-    const payload: any = {
-      ...this.booking,
-      fechaEntrada: new Date(this.booking.fechaEntrada).toISOString().slice(0, 19),
-      fechaSalida: new Date(this.booking.fechaSalida).toISOString().slice(0, 19)
-    };
-
-    this.usePoints = this.paymentMethod === 'pointsCash';
-
-    this.bookingService.createBooking(payload, this.usePoints).subscribe({
-      next: (data) => {
-        Swal.fire('Reserva creada', 'La reserva se ha creado correctamente.', 'success');
-        this.bookingFormSubmitted = false;
-        form.resetForm();
-
-        // Cerrar el modal manualmente
-        const modalElement = document.getElementById('bookingModal');
-        if (modalElement) {
-          const modal = bootstrap.Modal.getInstance(modalElement);
-          modal.hide();
-        }
-      },
-      error: (error) => {
-        const errorMessage = error.error?.message || 'Hubo un error al crear la reserva.';
-        Swal.fire('Error', errorMessage, 'error');
-      }
-    });
+  if (form.invalid) {
+    return;
   }
+
+  // Prepare a payload with ISO strings for the backend while keeping this.booking as Date objects
+  const payload: any = {
+    ...this.booking,
+    fechaEntrada: new Date(this.booking.fechaEntrada).toISOString().slice(0, 19),
+    fechaSalida: new Date(this.booking.fechaSalida).toISOString().slice(0, 19)
+  };
+
+  this.usePoints = this.paymentMethod === 'pointsCash';
+
+  this.bookingService.createBooking(payload, this.usePoints).subscribe({
+    next: (data) => {
+      Swal.fire({
+        title: 'Reserva creada correctamente',
+        text: '¿Deseas proceder al pago ahora?',
+        icon: 'success',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, pagar ahora',
+        cancelButtonText: 'No, después'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // 🔹 Llamar al nuevo método para procesar el pago
+        var idReserva = data.idReserva ;
+        //console.log(idReserva);
+        this.realizarPagoReserva(String(idReserva));
+
+        }
+      });
+
+      this.bookingFormSubmitted = false;
+      form.resetForm();
+
+      // Cerrar el modal manualmente
+      const modalElement = document.getElementById('bookingModal');
+      if (modalElement) {
+        const modal = bootstrap.Modal.getInstance(modalElement);
+        modal.hide();
+      }
+    },
+    error: (error) => {
+      const errorMessage = error.error?.message || 'Hubo un error al crear la reserva.';
+      Swal.fire('Error', errorMessage, 'error');
+    }
+  });
+}
+
+/* 🔹 NUEVO MÉTODO para abrir la pasarela de pago */
+realizarPagoReserva(idReserva: string) {
+  this.bookingService.realizarPago(idReserva).subscribe({
+    next: (preference) => {
+      //if (preference && preference.init_point) {
+      //console.log(preference)
+        //window.location.href = preference.init_point; // Redirigir a MercadoPago
+        console.log('Respuesta del backend:', preference);
+
+         window.open(preference.initPoint, '_self'); // o '_self' si quieres en la misma pestaña
+     // } else {
+       // Swal.fire('Error', 'No se pudo iniciar el proceso de pago.', 'error');
+     // }
+    },
+    error: (err) => {
+      console.error('Error al generar pago:', err);
+      Swal.fire('Error', 'Ocurrió un problema al conectar con la pasarela de pago.', 'error');
+    }
+  });
+}
+
 }
