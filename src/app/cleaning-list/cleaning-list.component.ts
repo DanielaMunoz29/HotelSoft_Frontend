@@ -18,6 +18,8 @@ export class CleaningListComponent implements OnInit {
   limpiezas: LimpiezaDto[] = [];
   loading = true;
   userId!: number;
+  userRol!:string;
+  isAdmin!:boolean;
 
   limpiezaSeleccionada: LimpiezaDto = {
     id: 0,
@@ -53,6 +55,10 @@ export class CleaningListComponent implements OnInit {
 
   ngOnInit(): void {
     this.userId = Number(this.authService.getUserIdFromToken());
+    this.userRol = this.authService.getStoredUserData().role;
+    this.isAdmin = this.authService.getStoredUserData()?.role === 'ADMIN';
+
+    
     if (this.userId) {
       this.cargarLimpiezas();
       
@@ -64,7 +70,9 @@ export class CleaningListComponent implements OnInit {
   }
 
   cargarLimpiezas(): void {
-    this.userService.getLimpiezasByUser(this.userId).subscribe({
+    
+    if(this.isAdmin){
+          this.userService.listarLimpiezas().subscribe({
       next: (data) => {
         this.limpiezas = data;
         this.loading = false;
@@ -74,6 +82,21 @@ export class CleaningListComponent implements OnInit {
         this.loading = false;
       }
     });
+    }else{
+      this.userService.getLimpiezasByUser(this.userId).subscribe({
+      next: (data) => {
+        this.limpiezas = data;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Error cargando limpiezas:', err);
+        this.loading = false;
+      }
+    });
+
+    }
+
+   
   }
 
   abrirModalEdicion(limpieza: LimpiezaDto): void {
@@ -101,7 +124,7 @@ export class CleaningListComponent implements OnInit {
   }
 
   abrirModalRegistro(): void {
-    console.log(this.limpiezas)
+    
     this.nuevaLimpieza = {
       id: 0,
       idRecepcionista: 0,
@@ -122,8 +145,6 @@ export class CleaningListComponent implements OnInit {
   }
 
   registrarLimpieza(): void {
-    
-    console.log(this.nuevaLimpieza);
     this.userService.registrarLimpieza(this.nuevaLimpieza).subscribe({
       next: (data) => {
         console.log('Limpieza registrada:', data);

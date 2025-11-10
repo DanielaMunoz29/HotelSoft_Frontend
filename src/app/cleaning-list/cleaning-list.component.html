@@ -2,11 +2,13 @@
   <h2 class="text-center mb-4">Limpiezas Asignadas</h2>
 
   <!-- 🔹 Botón para registrar limpieza -->
-  <div class="text-end mb-3">
-    <button class="btn btn-success" (click)="abrirModalRegistro()">
-      <i class="bi bi-plus-circle"></i> Registrar Limpieza
-    </button>
-  </div>
+  @if (isAdmin) {
+    <div class="text-end mb-3">
+      <button class="btn btn-success" (click)="abrirModalRegistro()" [disabled]="!isAdmin">
+        <i class="bi bi-plus-circle"></i> Registrar Limpieza
+      </button>
+    </div>
+  }
 
   <!-- Loading -->
   <div *ngIf="loading" class="text-center">
@@ -69,6 +71,23 @@
         </div>
 
         <div class="modal-body">
+          @if(isAdmin){
+        <div class="mb-3">
+          <label for="idRecepcionista" class="form-label">Recepcionista ID</label>
+          <input
+            type="number"
+            id="idRecepcionista"
+            class="form-control"
+            [(ngModel)]="limpiezaSeleccionada.idRecepcionista"
+            name="idRecepcionista"
+            required
+          />
+        </div>
+
+            
+          }
+          
+
           <div class="mb-3">
             <label for="tipoAseo" class="form-label">Tipo de Aseo</label>
             <select class="form-select" id="tipoAseo" [(ngModel)]="limpiezaSeleccionada.tipoAseo" name="tipoAseo">
@@ -109,6 +128,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <form (ngSubmit)="registrarLimpieza()">
+        
         <div class="modal-header">
           <h5 class="modal-title" id="registrarLimpiezaLabel">Registrar Nueva Limpieza</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>

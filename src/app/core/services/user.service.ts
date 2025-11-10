@@ -16,6 +16,9 @@ export class UserService {
     private http: HttpClient
   ) { }
 
+  listarLimpiezas(): Observable<LimpiezaDto[]> {
+    return this.http.get<LimpiezaDto[]>(`${this.apiUrl}/ListarLimpiezas`);
+  }
 
     //  Registrar nueva limpieza
   registrarLimpieza(limpieza: LimpiezaDto): Observable<LimpiezaDto> {
