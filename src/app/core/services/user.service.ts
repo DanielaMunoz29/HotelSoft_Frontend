@@ -9,16 +9,26 @@ import { LimpiezaDto } from '../models/LimpiezaDto';
 })
 export class UserService {
 
-  private apiUrl = 'https://hotelsoft-backend.onrender.com/api/users';
+  //private apiUrl = 'https://hotelsoft-backend.onrender.com/api/users';
+  private apiUrl = 'http://localhost:8080/api/users';
 
   constructor(
     private http: HttpClient
   ) { }
 
 
+    //  Registrar nueva limpieza
+  registrarLimpieza(limpieza: LimpiezaDto): Observable<LimpiezaDto> {
+    return this.http.post<LimpiezaDto>(`${this.apiUrl}/registrarLimpieza`, limpieza);
+  }
+
     // Obtener limpiezas por usuario
   getLimpiezasByUser(userId: number): Observable<LimpiezaDto[]> {
     return this.http.get<LimpiezaDto[]>(`${this.apiUrl}/listarLimpiezaByusuario/${userId}`);
+  }
+  // 🔹 Editar limpieza (PUT)
+  updateLimpieza(id: number, limpieza: Partial<LimpiezaDto>): Observable<LimpiezaDto> {
+    return this.http.put<LimpiezaDto>(`${this.apiUrl}/editarLimpieza/${id}`, limpieza);
   }
 
   getUserByDocument(cedula: string): Observable<User> {

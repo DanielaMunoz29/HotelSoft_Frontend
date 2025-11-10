@@ -76,7 +76,7 @@ export interface GoogleLoginPayload {
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly API_BASE_URL = 'https://hotelsoft-backend.onrender.com';
+  private readonly API_BASE_URL = 'http://localhost:8080';
   private readonly TOKEN_KEY = 'auth_token';
   private readonly USER_KEY = 'user_data';
 
@@ -483,6 +483,7 @@ export class AuthService {
           .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
           .join('')
       );
+      //console.log(JSON.parse(jsonPayload))
       return JSON.parse(jsonPayload);
     } catch (e) {
       console.error('decodeToken error:', e);
@@ -516,7 +517,7 @@ export class AuthService {
     const token = this.getToken();
     const payload = this.decodeToken(token);
     if (!payload) return null;
-    return payload.sub ?? payload.id ?? payload.userId ?? null;
+    return payload.cedula ?? payload.cedula ?? payload.userId ?? null;
   }
 
 

@@ -1,6 +1,12 @@
-
 <div class="container mt-5">
   <h2 class="text-center mb-4">Limpiezas Asignadas</h2>
+
+  <!-- 🔹 Botón para registrar limpieza -->
+  <div class="text-end mb-3">
+    <button class="btn btn-success" (click)="abrirModalRegistro()">
+      <i class="bi bi-plus-circle"></i> Registrar Limpieza
+    </button>
+  </div>
 
   <!-- Loading -->
   <div *ngIf="loading" class="text-center">
@@ -23,17 +29,124 @@
           <th>Tipo de Aseo</th>
           <th>Descripción</th>
           <th>Fecha</th>
+          <th>Estado</th>
+          <th>Acción</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let limpieza of limpiezas" class="text-center">
           <td>{{ limpieza.id }}</td>
-          <td>{{ limpieza.habitacionNombre }}</td>
+          <td>{{ limpieza.nombreHabitacion }}</td>
           <td>{{ limpieza.tipoAseo }}</td>
-          <td>{{ limpieza.descripcion }}</td>
+          <td>{{ limpieza.observaciones }}</td>
           <td>{{ limpieza.fechaRegistro | date:'medium' }}</td>
+          <td>
+            <span class="badge"
+                  [ngClass]="limpieza.estado === 'COMPLETADO' ? 'bg-success' : 'bg-secondary'">
+              {{ limpieza.estado }}
+            </span>
+          </td>
+          <td>
+            <button class="btn btn-outline-primary btn-sm"
+                    (click)="abrirModalEdicion(limpieza)">
+              <i class="bi bi-pencil-square"></i> Editar
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>
+  </div>
+</div>
+
+<!-- 🔹 MODAL EDICIÓN -->
+<div class="modal fade" id="editarLimpiezaModal" tabindex="-1" aria-labelledby="editarLimpiezaLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form (ngSubmit)="guardarCambios()">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editarLimpiezaLabel">Editar Limpieza</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="tipoAseo" class="form-label">Tipo de Aseo</label>
+            <select class="form-select" id="tipoAseo" [(ngModel)]="limpiezaSeleccionada.tipoAseo" name="tipoAseo">
+              <option value="COMPLETO">Completo</option>
+              <option value="CAMBIO_ROPA_CAMA">Cambio de ropa de cama</option>
+              <option value="LIMPIEZA_BAÑO">Limpieza de baño</option>
+              <option value="LIMPIEZA_RAPIDA">Limpieza rápida</option>
+              <option value="DESINFECCION">Desinfección</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="observaciones" class="form-label">Observaciones</label>
+            <textarea id="observaciones" class="form-control" [(ngModel)]="limpiezaSeleccionada.observaciones"
+                      name="observaciones" rows="3"></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label for="estado" class="form-label">Estado</label>
+            <select class="form-select" id="estado" [(ngModel)]="limpiezaSeleccionada.estado" name="estado">
+              <option value="NO_COMPLETADO">No completado</option>
+              <option value="COMPLETADO">Completado</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- 🔹 MODAL REGISTRO -->
+<div class="modal fade" id="registrarLimpiezaModal" tabindex="-1" aria-labelledby="registrarLimpiezaLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form (ngSubmit)="registrarLimpieza()">
+        <div class="modal-header">
+          <h5 class="modal-title" id="registrarLimpiezaLabel">Registrar Nueva Limpieza</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Habitación ID</label>
+            <input type="number" class="form-control" [(ngModel)]="nuevaLimpieza.idHabitacion" name="habitacionId" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Recepcionista ID</label>
+            <input type="number" class="form-control" [(ngModel)]="nuevaLimpieza.idRecepcionista" name="recepcionistaId" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Tipo de Aseo</label>
+            <select class="form-select" [(ngModel)]="nuevaLimpieza.tipoAseo" name="tipoAseo" required>
+              <option value="COMPLETO">Completo</option>
+              <option value="CAMBIO_ROPA_CAMA">Cambio de ropa de cama</option>
+              <option value="LIMPIEZA_BAÑO">Limpieza de baño</option>
+              <option value="LIMPIEZA_RAPIDA">Limpieza rápida</option>
+              <option value="DESINFECCION">Desinfección</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Observaciones</label>
+            <textarea class="form-control" [(ngModel)]="nuevaLimpieza.observaciones" name="observaciones" rows="3"></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-success">Registrar</button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>

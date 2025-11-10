@@ -1,10 +1,12 @@
+
 export interface LimpiezaDto {
   id: number;
-  habitacionId: number;
-  habitacionNombre: string;
+  idHabitacion: number;
+  nombreHabitacion: string;
   tipoAseo: string;
-  descripcion: string;
+  observaciones: string;
+  estado:string;
   fechaRegistro: string;
-  recepcionistaId: number;
+  idRecepcionista: number;
   recepcionistaNombre: string;
 }

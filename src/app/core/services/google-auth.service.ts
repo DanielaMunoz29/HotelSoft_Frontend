@@ -13,7 +13,7 @@ declare const google: any;
   providedIn: 'root'
 })
 export class GoogleAuthService {
-  private readonly API_BASE_URL = 'https://hotelsoft-backend.onrender.com';
+  private readonly API_BASE_URL = 'http://localhost:8080';
   private googleInitialized = false;
   
   private googleTokenSubject = new BehaviorSubject<string | null>(null);

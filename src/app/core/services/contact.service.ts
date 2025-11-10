@@ -6,7 +6,8 @@ import { Injectable } from '@angular/core';
 })
 export class ContactService {
 
-  private apiUrl = 'https://hotelsoft-backend.onrender.com/api/contactenos';
+  //private apiUrl = 'https://hotelsoft-backend.onrender.com/api/contactenos';
+  private apiUrl = 'http://localhost:8080/api/contactenos';
 
   constructor(
     private http: HttpClient

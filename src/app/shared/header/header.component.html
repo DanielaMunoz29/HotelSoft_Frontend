@@ -34,7 +34,7 @@
             <span>{{ getUserDisplayName() }}</span>
           </a>
           <ul class="dropdown-menu dropdown-menu-end">
-            @if (!isAdmin) {
+            @if (isUser) {
             <li>
               <a class="d-flex dropdown-item align-items-center justify-content-center text-secondary" routerLink="/room-form">
                 {{currentUser.puntos}} puntos
@@ -50,6 +50,11 @@
                 <i class="bi bi-calendar-event me-2" style="font-size: 1.2rem;"></i>Mis Reservas
               </a>
             </li>
+            <li>
+              <a class="d-flex dropdown-item align-items-center" routerLink="/cleaning-list">
+                <i class="bi bi-door-open me-2" style="font-size: 1.2rem;"></i>Habitaciones a limpiar
+              </a>
+            </li>
             }@else if (isEmpleado) {
               <!-- Empleado -->
                <li>
@@ -59,11 +64,11 @@
             </li>
 
             <li>
-              <a class="d-flex dropdown-item align-items-center" routerLink="/room-list-limpieza">
+              <a class="d-flex dropdown-item align-items-center" routerLink="/cleaning-list">
                 <i class="bi bi-door-open me-2" style="font-size: 1.2rem;"></i>Habitaciones a limpiar
               </a>
             </li>
-            }@else {
+            }@else if (isAdmin) {
             <li>
               <a class="d-flex dropdown-item align-items-center" routerLink="/room-form">
                 <i class="bi bi-house-add me-2" style="font-size: 1.2rem;"></i>Crear habitación

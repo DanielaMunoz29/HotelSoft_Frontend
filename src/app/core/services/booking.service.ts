@@ -9,7 +9,9 @@ import { Observable } from 'rxjs';
 })
 export class BookingService {
 
-  private apiUrl = 'https://hotelsoft-backend.onrender.com/api/reservas';
+  private apiUrl = 'http://localhost:8080/api/reservas';
+
+  //private apiUrl = 'https://hotelsoft-backend.onrender.com/api/reservas';
 
   constructor(private http: HttpClient) { }
 
