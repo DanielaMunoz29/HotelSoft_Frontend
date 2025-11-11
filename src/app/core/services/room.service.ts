@@ -9,7 +9,7 @@ import { Room } from '../models/room.model';
 export class RoomService {
 
   //private apiUrl = 'https://hotelsoft-backend.onrender.com/api/habitaciones';
-  private apiUrl = 'http://localhost:8080/api/habitaciones';
+  private apiUrl = 'https://hotelsoftback-1495464507.northamerica-northeast1.run.app/api/habitaciones';
 
   constructor(private http: HttpClient) { }
 

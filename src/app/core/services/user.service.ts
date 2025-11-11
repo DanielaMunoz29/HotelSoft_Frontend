@@ -10,7 +10,7 @@ import { LimpiezaDto } from '../models/LimpiezaDto';
 export class UserService {
 
   //private apiUrl = 'https://hotelsoft-backend.onrender.com/api/users';
-  private apiUrl = 'http://localhost:8080/api/users';
+  private apiUrl = 'https://hotelsoftback-1495464507.northamerica-northeast1.run.app/api/users';
 
   constructor(
     private http: HttpClient
