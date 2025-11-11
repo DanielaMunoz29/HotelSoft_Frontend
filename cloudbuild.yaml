@@ -1,0 +1,37 @@
+
+# Cloud Build configuration para Front-EventosClick
+
+options:
+  logging: CLOUD_LOGGING_ONLY  # Solo enviar logs a Cloud Logging
+
+substitutions:
+  _BRANCH_NAME: "GoogleCloud"
+
+# Imágenes que se construirán y subirán
+images:
+  - 'gcr.io/$PROJECT_ID/hotelfront'
+
+steps:
+  # Paso 1: Construir la imagen Docker
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Build Docker Image'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/hotelfront', '.']
+
+  # Paso 2: Publicar la imagen en Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Push Docker Image'
+    args: ['push', 'gcr.io/$PROJECT_ID/hotelfront']
+
+  # Paso 3: Desplegar en Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: 'Deploy to Cloud Run'
+    entrypoint: 'gcloud'
+    args:
+      [
+        'run', 'deploy', 'hotelfront',
+        '--image', 'gcr.io/$PROJECT_ID/hotelfront',
+        '--region', 'northamerica-northeast1',
+        '--platform', 'managed',
+        '--allow-unauthenticated',
+        '--quiet'
+      ]
