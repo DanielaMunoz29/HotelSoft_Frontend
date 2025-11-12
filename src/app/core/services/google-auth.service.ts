@@ -13,8 +13,8 @@ declare const google: any;
   providedIn: 'root'
 })
 export class GoogleAuthService {
-  //private readonly API_BASE_URL = 'https://hotelsoftback-1495464507.northamerica-northeast1.run.app';
-  private readonly API_BASE_URL = 'https://hotelsoft-backend.onrender.com';
+  private readonly API_BASE_URL = 'https://hotelsoftback-1495464507.northamerica-northeast1.run.app';
+  //private readonly API_BASE_URL = 'https://hotelsoft-backend.onrender.com';
   private googleInitialized = false;
   
   private googleTokenSubject = new BehaviorSubject<string | null>(null);
