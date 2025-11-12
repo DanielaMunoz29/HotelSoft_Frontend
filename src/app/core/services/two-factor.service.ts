@@ -27,7 +27,7 @@ export interface TwoFactorStatusResponse {
   providedIn: 'root'
 })
 export class TwoFactorService {
-  private readonly API_BASE_URL = 'https://hotelsoftback-1495464507.northamerica-northeast1.run.app';
+  private readonly API_BASE_URL = 'https://hotelsoft-backendd-1495464507.northamerica-northeast1.run.app';
   //private readonly API_BASE_URL = 'https://hotelsoft-backend.onrender.com';
 
   constructor(
