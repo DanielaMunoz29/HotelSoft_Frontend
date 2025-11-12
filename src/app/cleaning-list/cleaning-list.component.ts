@@ -17,10 +17,9 @@ export class CleaningListComponent implements OnInit {
 
   limpiezas: LimpiezaDto[] = [];
   loading = true;
-  userId!: string;
+  userId!: number;
   userRol!:string;
   isAdmin!:boolean;
-  cedula!:number;
 
   limpiezaSeleccionada: LimpiezaDto = {
     id: 0,
@@ -55,22 +54,7 @@ export class CleaningListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const id = this.authService.getUserIdFromToken();
-    this.userId = id ? String(id) : '';
-
-   
-    this.userService.getUserByDocument(this.userId).subscribe({
-      next: (data) => {
-        const id = data.id;
-        this.cedula = id ? Number(id) : 0;
-
-    
-      },
-      error: (err) => {
-        console.error('Error cargando usuario:', err);
-    
-      }
-    });
+    this.userId = Number(this.authService.getUserIdFromToken());
     this.userRol = this.authService.getStoredUserData().role;
     this.isAdmin = this.authService.getStoredUserData()?.role === 'ADMIN';
 
@@ -99,7 +83,7 @@ export class CleaningListComponent implements OnInit {
       }
     });
     }else{
-      this.userService.getLimpiezasByUser(this.cedula).subscribe({
+      this.userService.getLimpiezasByUser(this.userId).subscribe({
       next: (data) => {
         this.limpiezas = data;
         this.loading = false;
